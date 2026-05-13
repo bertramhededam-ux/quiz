@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz · Skoleøvelse</title>
+  <meta name="description" content="Multiple-choice quiz til gymnasiet — Informatik B, Afsætning A, Erhvervsjura C og Virksomhedsøkonomi B. Score, blandede spørgsmål og personlige rekorder." />
+  <meta name="theme-color" content="#140a10" />
+
+  <!-- Favicon: lille kursiv Q i pink på mørk baggrund (inline SVG) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23140a10'/%3E%3Ctext x='50%25' y='68%25' text-anchor='middle' font-family='Georgia,serif' font-size='22' font-style='italic' font-weight='400' fill='%23ff8db3'%3EQ%3C/text%3E%3C/svg%3E" />
+
+  <!-- Open Graph (Messenger, Discord, Slack, iMessage osv.) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Quiz · Skoleøvelse" />
+  <meta property="og:description" content="Multiple-choice quiz til gymnasiet — fire fag, score og personlige rekorder." />
+  <meta property="og:locale" content="da_DK" />
+
+  <!-- Twitter card -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Quiz · Skoleøvelse" />
+  <meta name="twitter:description" content="Multiple-choice quiz til gymnasiet — fire fag, score og personlige rekorder." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=JetBrains+Mono:wght@300;400;500&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Fraunces"', 'serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+            sans: ['"Geist"', 'system-ui', 'sans-serif']
+          },
+          colors: {
+            ink:    'rgb(var(--bg-base-rgb) / <alpha-value>)',
+            shade:  'rgb(var(--bg-shade-rgb) / <alpha-value>)',
+            ash:    'rgb(var(--bg-ash-rgb) / <alpha-value>)',
+            steel:  'rgb(var(--bg-steel-rgb) / <alpha-value>)',
+            iron:   'rgb(var(--bg-iron-rgb) / <alpha-value>)',
+            mist:   'rgb(var(--mist-rgb) / <alpha-value>)',
+            fog:    'rgb(var(--fog-rgb) / <alpha-value>)',
+            chalk:  'rgb(var(--chalk-rgb) / <alpha-value>)',
+            bone:   'rgb(var(--bone-rgb) / <alpha-value>)',
+            rose:   'rgb(var(--rose-rgb) / <alpha-value>)',
+            blush:  'rgb(var(--blush-rgb) / <alpha-value>)',
+            hot:    'rgb(var(--hot-rgb) / <alpha-value>)',
+            coral:  'rgb(var(--coral-rgb) / <alpha-value>)',
+            peach:  'rgb(var(--peach-rgb) / <alpha-value>)',
+            berry:  'rgb(var(--berry-rgb) / <alpha-value>)',
+            amber:  '#f7b97a',
+            cream:  '#fff3e8'
+          }
+        }
+      }
+    }
+  </script>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    /* =========================================================
+       THEMES — defined as CSS variables.
+       Default :root is the pink theme; .theme-blue overrides.
+       Any element with .theme-pink or .theme-blue scopes the
+       theme to that subtree (used by subject cards on the
+       select screen so each previews its own color).
+       ========================================================= */
+    :root, .theme-pink {
+      --bg-base-rgb:  20 10 16;
+      --bg-shade-rgb: 28 14 21;
+      --bg-ash-rgb:   38 19 30;
+      --bg-steel-rgb: 52 26 41;
+      --bg-iron-rgb:  74 37 56;
+      --mist-rgb:     176 155 166;
+      --fog-rgb:      214 193 202;
+      --chalk-rgb:    247 237 232;
+      --bone-rgb:     241 220 204;
+      --rose-rgb:     255 141 179;
+      --blush-rgb:    255 179 200;
+      --hot-rgb:      255 93 151;
+      --coral-rgb:    255 157 130;
+      --peach-rgb:    255 199 148;
+      --berry-rgb:    214 63 99;
+      --ambient-1: rgba(255, 141, 179, 0.13);
+      --ambient-2: rgba(255, 199, 148, 0.10);
+      --ambient-3: rgba(255, 93, 151, 0.06);
+    }
+
+    .theme-blue {
+      --bg-base-rgb:  8 14 26;
+      --bg-shade-rgb: 11 19 38;
+      --bg-ash-rgb:   16 28 54;
+      --bg-steel-rgb: 26 42 74;
+      --bg-iron-rgb:  46 70 116;
+      --mist-rgb:     149 163 188;
+      --fog-rgb:      192 204 222;
+      --chalk-rgb:    232 238 248;
+      --bone-rgb:     211 222 240;
+      --rose-rgb:     126 180 255;
+      --blush-rgb:    170 207 255;
+      --hot-rgb:      74 143 255;
+      --coral-rgb:    130 200 212;
+      --peach-rgb:    184 216 232;
+      --berry-rgb:    214 63 99;
+      --ambient-1: rgba(126, 180, 255, 0.14);
+      --ambient-2: rgba(130, 200, 212, 0.08);
+      --ambient-3: rgba(74, 143, 255, 0.06);
+    }
+
+    .theme-gold {
+      --bg-base-rgb:  18 13 8;
+      --bg-shade-rgb: 26 19 12;
+      --bg-ash-rgb:   38 28 17;
+      --bg-steel-rgb: 56 40 22;
+      --bg-iron-rgb:  86 62 34;
+      --mist-rgb:     178 162 138;
+      --fog-rgb:      220 202 175;
+      --chalk-rgb:    246 235 214;
+      --bone-rgb:     235 213 173;
+      --rose-rgb:     240 192 96;
+      --blush-rgb:    248 220 156;
+      --hot-rgb:      220 156 56;
+      --coral-rgb:    224 154 108;
+      --peach-rgb:    240 216 168;
+      --berry-rgb:    214 63 99;
+      --ambient-1: rgba(240, 192, 96, 0.13);
+      --ambient-2: rgba(224, 154, 108, 0.10);
+      --ambient-3: rgba(220, 156, 56, 0.06);
+    }
+
+    .theme-green {
+      --bg-base-rgb:  8 22 16;
+      --bg-shade-rgb: 11 28 21;
+      --bg-ash-rgb:   14 38 28;
+      --bg-steel-rgb: 22 56 40;
+      --bg-iron-rgb:  38 84 60;
+      --mist-rgb:     145 175 158;
+      --fog-rgb:      192 218 202;
+      --chalk-rgb:    230 246 235;
+      --bone-rgb:     210 232 218;
+      --rose-rgb:     110 224 168;
+      --blush-rgb:    168 232 192;
+      --hot-rgb:      46 200 128;
+      --coral-rgb:    110 200 200;
+      --peach-rgb:    200 224 184;
+      --berry-rgb:    214 63 99;
+      --ambient-1: rgba(110, 224, 168, 0.13);
+      --ambient-2: rgba(110, 200, 200, 0.08);
+      --ambient-3: rgba(46, 200, 128, 0.06);
+    }
+
+    html, body { background-color: rgb(var(--bg-base-rgb)); color: rgb(var(--chalk-rgb)); }
+    body {
+      font-family: 'Geist', system-ui, sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      letter-spacing: -0.005em;
+      transition: background-color 0.7s ease, color 0.7s ease;
+    }
+
+    /* Dot grid — uses theme accent */
+    .bg-dots {
+      background-image: radial-gradient(rgb(var(--rose-rgb) / 0.08) 1px, transparent 1px);
+      background-size: 28px 28px;
+      background-position: 14px 14px;
+      transition: background-image 0.7s ease;
+    }
+
+    /* Ambient corner blooms — themed */
+    .ambient::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 50;
+      background:
+        radial-gradient(ellipse 65% 55% at 12% 8%, var(--ambient-1), transparent 70%),
+        radial-gradient(ellipse 55% 45% at 92% 92%, var(--ambient-2), transparent 70%),
+        radial-gradient(ellipse 40% 30% at 95% 10%, var(--ambient-3), transparent 70%),
+        radial-gradient(ellipse at center, transparent 0%, transparent 55%, rgb(var(--bg-base-rgb) / 0.65) 100%);
+      pointer-events: none;
+      transition: background 0.7s ease;
+    }
+
+    /* Faint scanlines */
+    .scanlines::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 60;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,0) 0px, rgba(0,0,0,0) 2px,
+        rgba(0,0,0,0.02) 3px, rgba(0,0,0,0.02) 4px
+      );
+      pointer-events: none;
+    }
+
+    /* Grain */
+    .grain::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 55;
+      background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/></svg>");
+      opacity: 0.04; pointer-events: none;
+      mix-blend-mode: overlay;
+    }
+
+    /* Themed glows */
+    .glow-rose  { text-shadow: 0 0 10px rgb(var(--rose-rgb) / 0.55), 0 0 32px rgb(var(--rose-rgb) / 0.22); }
+    .glow-hot   { text-shadow: 0 0 10px rgb(var(--hot-rgb) / 0.55),  0 0 32px rgb(var(--hot-rgb) / 0.22); }
+    .glow-peach { text-shadow: 0 0 10px rgb(var(--peach-rgb) / 0.55); }
+    .glow-berry { text-shadow: 0 0 10px rgb(var(--berry-rgb) / 0.55); }
+
+    /* Themed shadows — used instead of arbitrary Tailwind rgba shadows */
+    .shadow-accent-bar   { box-shadow: 0 0 18px rgb(var(--rose-rgb) / 0.65); }
+    .shadow-accent-dot   { box-shadow: 0 0 14px rgb(var(--rose-rgb) / 0.95), 0 0 32px rgb(var(--rose-rgb) / 0.55); }
+    .shadow-accent-pop   { box-shadow: 0 0 40px -10px rgb(var(--rose-rgb) / 0.75); }
+    .shadow-accent-soft  { box-shadow: 0 20px 60px -20px rgb(var(--rose-rgb) / 0.55); }
+
+    /* Cursor */
+    @keyframes blink { 0%,50% { opacity: 1; } 50.01%,100% { opacity: 0; } }
+    .cursor::after {
+      content: '▍'; display: inline-block;
+      animation: blink 1.1s steps(1) infinite;
+      margin-left: 6px; transform: translateY(-2px);
+      color: rgb(var(--rose-rgb));
+    }
+
+    /* Animations */
+    @keyframes slideUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+    .slide-up { animation: slideUp 0.7s cubic-bezier(0.16,1,0.3,1) both; }
+
+    @keyframes slideLeft { from { opacity: 0; transform: translateX(48px); } to { opacity: 1; transform: translateX(0); } }
+    .slide-left { animation: slideLeft 0.5s cubic-bezier(0.16,1,0.3,1) both; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .fade-in { animation: fadeIn 0.55s ease both; }
+
+    @keyframes scorePop {
+      0%   { transform: translate(-50%, 4px) scale(0.85); opacity: 0; }
+      20%  { transform: translate(-50%, 0) scale(1); opacity: 1; }
+      100% { transform: translate(-50%, -56px) scale(1.05); opacity: 0; }
+    }
+    .score-pop { animation: scorePop 1.2s cubic-bezier(0.16,1,0.3,1) forwards; }
+
+    @keyframes scoreBump {
+      0%   { transform: scale(1); }
+      30%  { transform: scale(1.18); }
+      100% { transform: scale(1); }
+    }
+    .score-bump { animation: scoreBump 0.55s cubic-bezier(0.16,1,0.3,1); }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.9; box-shadow: 0 0 0 0 rgb(var(--rose-rgb) / 0.55); }
+      50%      { opacity: 1;   box-shadow: 0 0 0 7px rgb(var(--rose-rgb) / 0); }
+    }
+    .pulse-dot { animation: pulse 2.4s ease-in-out infinite; }
+
+    /* Selection */
+    ::selection { background: rgb(var(--rose-rgb) / 0.45); color: rgb(var(--chalk-rgb)); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: rgb(var(--bg-base-rgb)); }
+    ::-webkit-scrollbar-thumb { background: rgb(var(--bg-steel-rgb)); border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgb(var(--bg-iron-rgb)); }
+
+    button { font-family: inherit; -webkit-tap-highlight-color: transparent; }
+    button:focus-visible { outline: 1px solid rgb(var(--rose-rgb) / 0.7); outline-offset: 3px; border-radius: 2px; }
+
+    .meta {
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-feature-settings: "ss01";
+    }
+
+    .letter-badge { transition: all 0.3s cubic-bezier(0.16,1,0.3,1); }
+
+    .opt {
+      transition: transform 0.4s cubic-bezier(0.16,1,0.3,1),
+                  background-color 0.3s ease,
+                  border-color 0.3s ease,
+                  color 0.3s ease,
+                  box-shadow 0.4s ease;
+    }
+    .opt-idle:hover {
+      background: rgb(var(--rose-rgb) / 0.055);
+      border-color: rgb(var(--rose-rgb) / 0.5);
+      transform: translateY(-1px);
+    }
+    .opt-idle:hover .letter-badge {
+      background: rgb(var(--rose-rgb) / 0.18);
+      border-color: rgb(var(--rose-rgb) / 0.6);
+      color: rgb(var(--rose-rgb));
+    }
+    .opt-idle:hover .arrow { opacity: 0.7; transform: translateX(0); }
+
+    .card-soft {
+      transition: transform 0.5s cubic-bezier(0.16,1,0.3,1),
+                  border-color 0.4s ease,
+                  background-color 0.4s ease,
+                  box-shadow 0.5s ease;
+    }
+    .card-soft:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 26px 70px -30px rgb(var(--rose-rgb) / 0.4);
+    }
+
+    .progress-fill { transition: width 0.75s cubic-bezier(0.16,1,0.3,1); }
+
+    .ring-soft { box-shadow: inset 0 0 0 1px rgb(var(--chalk-rgb) / 0.025); }
+
+    .tnum { font-variant-numeric: tabular-nums; }
+  </style>
+</head>
+<body class="bg-ink bg-dots grain scanlines ambient">
+  <div id="root" class="relative z-10"></div>
+
+  <script type="text/babel" data-presets="env,react">
+const { useState, useEffect, useMemo, useRef } = React;
+
+/* =========================================================
+   QUESTION BANK — Informatik B (begynder-niveau)
+   ========================================================= */
+const QUESTIONS_INFORMATIK_B = [
+  // === Digitale systemer ===
+  { id: 1, topic: 'Digitale systemer', question: 'Hvilke to cifre bruges i det binære talsystem?', options: ['0 og 1', '1 og 2', '0 og 9', 'A og B'], correct: 0 },
+  { id: 2, topic: 'Digitale systemer', question: 'Hvor mange bits er der i én byte?', options: ['4', '8', '16', '32'], correct: 1 },
+  { id: 3, topic: 'Digitale systemer', question: 'Hvilket talsystem bruger en computer internt?', options: ['Decimalt (basis 10)', 'Binært (basis 2)', 'Romertal', 'Hexadecimalt'], correct: 1 },
+  { id: 4, topic: 'Digitale systemer', question: 'Hvad giver den logiske operation 1 AND 1?', options: ['0', '1', '2', 'Fejl'], correct: 1 },
+  { id: 5, topic: 'Digitale systemer', question: 'Hvad bruges hexadecimale tal ofte til på en hjemmeside?', options: ['Sidetal', 'Farvekoder (fx #FF0000)', 'Telefonnumre', 'Postnumre'], correct: 1 },
+
+  // === Netværk og internet ===
+  { id: 6, topic: 'Netværk og internet', question: 'Hvad bruges en IP-adresse til?', options: ['At kryptere data', 'At identificere en enhed på et netværk', 'At gemme adgangskoder', 'At måle internethastighed'], correct: 1 },
+  { id: 7, topic: 'Netværk og internet', question: 'Hvad betyder "S" i HTTPS?', options: ['Server', 'Secure (sikker)', 'Speed', 'Standard'], correct: 1 },
+  { id: 8, topic: 'Netværk og internet', question: 'Hvad er DNS sammenlignet med?', options: ['En firewall', 'Internettets telefonbog', 'En router', 'Et antivirusprogram'], correct: 1 },
+  { id: 9, topic: 'Netværk og internet', question: 'Hvad sker der, når du skriver en URL og trykker enter?', options: ['Computeren genstartes', 'Din browser sender en forespørgsel til en server', 'En fil downloades automatisk', 'Internettet kobles fra'], correct: 1 },
+  { id: 10, topic: 'Netværk og internet', question: 'Hvad er internettet bedst beskrevet som?', options: ['Et enkelt firmas netværk', 'Et globalt netværk af computere', 'En kæmpe harddisk', 'Et tv-signal'], correct: 1 },
+
+  // === Databaser ===
+  { id: 11, topic: 'Databaser', question: 'Hvilket sprog bruges typisk til at arbejde med databaser?', options: ['HTML', 'SQL', 'CSS', 'Python'], correct: 1 },
+  { id: 12, topic: 'Databaser', question: 'Hvilken SQL-kommando henter data fra en tabel?', options: ['INSERT', 'DELETE', 'SELECT', 'UPDATE'], correct: 2 },
+  { id: 13, topic: 'Databaser', question: 'Hvad er en primær nøgle (primary key) i en tabel?', options: ['Adgangskoden til databasen', 'Et unikt ID for hver række', 'Den første kolonne i tabellen', 'Et krypteret felt'], correct: 1 },
+  { id: 14, topic: 'Databaser', question: 'Hvordan er data organiseret i en SQL-database?', options: ['I rækker og kolonner (tabeller)', 'Som mapper og filer', 'I lange tekstdokumenter', 'Som billeder'], correct: 0 },
+  { id: 15, topic: 'Databaser', question: 'Hvad er en database grundlæggende?', options: ['Et program til at tegne med', 'En struktureret samling af data', 'En type internetforbindelse', 'En backup af harddisken'], correct: 1 },
+
+  // === Programmering ===
+  { id: 16, topic: 'Programmering', question: 'Hvad er en variabel?', options: ['En fejl i koden', 'En navngivet beholder for en værdi', 'Et programmeringssprog', 'En type fil'], correct: 1 },
+  { id: 17, topic: 'Programmering', question: 'Hvad bruges en for-løkke til?', options: ['At gemme en fil', 'At gentage kode et bestemt antal gange', 'At tegne en figur', 'At lukke programmet'], correct: 1 },
+  { id: 18, topic: 'Programmering', question: 'Hvad gør en if-sætning?', options: ['Lukker programmet', 'Udfører kode hvis en betingelse er sand', 'Gemmer en variabel', 'Gentager kode for evigt'], correct: 1 },
+  { id: 19, topic: 'Programmering', question: 'Hvad er et array (eller en liste)?', options: ['Et tal mellem 0 og 1', 'En samling af flere værdier i én variabel', 'En type fejl', 'En kommentar i koden'], correct: 1 },
+  { id: 20, topic: 'Programmering', question: 'Hvad er en funktion i programmering?', options: ['En knap på tastaturet', 'En genbrugelig blok kode som kan kaldes', 'En type variabel', 'En kommentar'], correct: 1 },
+
+  // === Algoritmer og datastrukturer ===
+  { id: 21, topic: 'Algoritmer og datastrukturer', question: 'Hvad er en algoritme?', options: ['En type computer', 'En trinvis opskrift på at løse en opgave', 'En matematisk fejl', 'Et programmeringssprog'], correct: 1 },
+  { id: 22, topic: 'Algoritmer og datastrukturer', question: 'Hvilken datastruktur ligner en stak tallerkener (sidst ind, først ud)?', options: ['Kø', 'Stak (Stack)', 'Træ', 'Liste'], correct: 1 },
+  { id: 23, topic: 'Algoritmer og datastrukturer', question: 'Hvilken datastruktur ligner en kø i banken (først ind, først ud)?', options: ['Stak', 'Kø (Queue)', 'Træ', 'Array'], correct: 1 },
+  { id: 24, topic: 'Algoritmer og datastrukturer', question: 'Hvad gør en sorteringsalgoritme?', options: ['Sletter data', 'Sætter en liste i rækkefølge', 'Kopierer en fil', 'Krypterer data'], correct: 1 },
+  { id: 25, topic: 'Algoritmer og datastrukturer', question: 'Hvad fortæller Big O notation (fx O(n)) om en algoritme?', options: ['Hvor smuk koden er', 'Hvor hurtigt eller effektivt den arbejder', 'Hvor mange linjer kode den har', 'Hvilket sprog den er skrevet i'], correct: 1 },
+
+  // === Sikkerhed og kryptografi ===
+  { id: 26, topic: 'Sikkerhed og kryptografi', question: 'Hvad er kryptering?', options: ['At slette data', 'At gøre data ulæselige for uvedkommende', 'At gemme data online', 'At kopiere data'], correct: 1 },
+  { id: 27, topic: 'Sikkerhed og kryptografi', question: 'Hvad er phishing?', options: ['En type spil', 'Forsøg på at snyde folk til at give følsomme oplysninger', 'En backup-metode', 'En type kabel'], correct: 1 },
+  { id: 28, topic: 'Sikkerhed og kryptografi', question: 'Hvad gør en firewall?', options: ['Slukker computeren ved fare', 'Filtrerer og blokerer uønsket netværkstrafik', 'Krypterer din harddisk', 'Renser dit tastatur'], correct: 1 },
+  { id: 29, topic: 'Sikkerhed og kryptografi', question: 'Hvad betyder hængelåsen i browserens adresselinje?', options: ['Hjemmesiden er låst for dig', 'Forbindelsen er krypteret med HTTPS', 'Din computer er låst', 'Du har glemt at logge ind'], correct: 1 },
+  { id: 30, topic: 'Sikkerhed og kryptografi', question: 'Hvilken type kryptering bruger både en offentlig og en privat nøgle?', options: ['Symmetrisk', 'Asymmetrisk', 'Ingen af dem', 'Begge er ens'], correct: 1 },
+
+  // === Operativsystemer ===
+  { id: 31, topic: 'Operativsystemer', question: 'Hvad er Windows, macOS og Linux eksempler på?', options: ['Browsere', 'Operativsystemer', 'Programmeringssprog', 'Antivirus-programmer'], correct: 1 },
+  { id: 32, topic: 'Operativsystemer', question: 'Hvad er en proces på en computer?', options: ['En fil på harddisken', 'Et program der kører lige nu', 'En type kabel', 'En adgangskode'], correct: 1 },
+  { id: 33, topic: 'Operativsystemer', question: 'Hvad er RAM?', options: ['Permanent lagring (filer)', 'Computerens arbejdshukommelse', 'Et grafikkort', 'En internetforbindelse'], correct: 1 },
+  { id: 34, topic: 'Operativsystemer', question: 'Hvor gemmes filer permanent (også når strømmen slukkes)?', options: ['I RAM', 'På harddisk eller SSD', 'I CPU\'en', 'I skærmen'], correct: 1 },
+  { id: 35, topic: 'Operativsystemer', question: 'Hvad er hovedopgaven for et operativsystem?', options: ['At lave hjemmesider', 'At styre computerens hardware og programmer', 'At redigere billeder', 'At sende e-mails'], correct: 1 },
+
+  // === IT og samfund ===
+  { id: 36, topic: 'IT og samfund', question: 'Hvad handler GDPR om?', options: ['Computerspil', 'Beskyttelse af personlige data', 'Internethastighed', 'Software-licenser'], correct: 1 },
+  { id: 37, topic: 'IT og samfund', question: 'Hvad er et digitalt fodaftryk?', options: ['Et fingeraftryk på skærmen', 'De spor man efterlader online', 'En type adgangskode', 'En fejl i et program'], correct: 1 },
+  { id: 38, topic: 'IT og samfund', question: 'Hvad beskytter ophavsret?', options: ['Computerens hardware', 'Kreative værker som musik, tekst og film', 'Internetforbindelsen', 'Adgangskoder'], correct: 1 },
+  { id: 39, topic: 'IT og samfund', question: 'Hvad er en cookie på en hjemmeside?', options: ['En småkage du kan bestille', 'En lille datafil der gemmes i din browser', 'En type virus', 'En reklame'], correct: 1 },
+  { id: 40, topic: 'IT og samfund', question: 'Hvad er ofte risikoen ved at dele mange personlige ting på sociale medier?', options: ['Computeren bliver langsom', 'Andre kan misbruge dine oplysninger', 'Du får dårligere wifi', 'Skærmen skades'], correct: 1 }
+];
+
+/* =========================================================
+   QUESTION BANK — Afsætning A
+   ========================================================= */
+const QUESTIONS_AFSAETNING_A = [
+  // === Markedsanalyse og dataindsamling ===
+  { id: 1,  topic: 'Markedsanalyse og dataindsamling', question: 'Hvad kendetegner primære data?', options: ['Data der allerede er indsamlet af andre', 'Data der indsamles specifikt til formålet', 'Data fra Danmarks Statistik', 'Data hentet fra interne databaser'], correct: 1 },
+  { id: 2,  topic: 'Markedsanalyse og dataindsamling', question: 'Hvad er desk research?', options: ['Feltinterviews ude hos kunder', 'Indsamling af eksisterende (sekundære) data', 'Observation af kunder i butikken', 'Et stort spørgeskema'], correct: 1 },
+  { id: 3,  topic: 'Markedsanalyse og dataindsamling', question: 'Hvilken metode er kvalitativ?', options: ['Spørgeskema med 1000 respondenter', 'Fokusgruppe med 6-8 deltagere', 'Webanalyse (CAWI)', 'Telefoninterview (CATI)'], correct: 1 },
+  { id: 4,  topic: 'Markedsanalyse og dataindsamling', question: 'Hvad er hovedformålet med en hypotese i en markedsanalyse?', options: ['At konkludere på undersøgelsen', 'At fungere som en antagelse der skal testes', 'At indsamle data', 'At vælge respondenter'], correct: 1 },
+  { id: 5,  topic: 'Markedsanalyse og dataindsamling', question: 'Hvad betyder en repræsentativ stikprøve?', options: ['En meget lille stikprøve', 'At stikprøven afspejler hele målgruppen', 'At alle deltagere er enige', 'At den koster lidt at lave'], correct: 1 },
+
+  // === Den interne situation – virksomhedsanalyse ===
+  { id: 6,  topic: 'Den interne situation', question: 'Hvor mange byggesten består Business Model Canvas af?', options: ['5', '7', '9', '12'], correct: 2 },
+  { id: 7,  topic: 'Den interne situation', question: 'Hvad er en kernekompetence?', options: ['En generel kompetence enhver virksomhed har', 'En særlig færdighed der giver konkurrencefordel', 'En medarbejders uddannelsesniveau', 'En type produkt'], correct: 1 },
+  { id: 8,  topic: 'Den interne situation', question: 'Hvad står "V" for i VRIO-analysen?', options: ['Volume', 'Value (værdi)', 'Vision', 'Variation'], correct: 1 },
+  { id: 9,  topic: 'Den interne situation', question: 'Hvilke forhold beskriver SW-delen i SWOT?', options: ['Eksterne muligheder og trusler', 'Interne styrker og svagheder', 'Kunder og konkurrenter', 'Salg og omkostninger'], correct: 1 },
+  { id: 10, topic: 'Den interne situation', question: 'Hvad viser værdikæden?', options: ['Virksomhedens kunder', 'De aktiviteter der skaber værdi i virksomheden', 'Konkurrenternes priser', 'Lovgivningen på markedet'], correct: 1 },
+
+  // === Den eksterne situation – omverdensanalyse ===
+  { id: 11, topic: 'Den eksterne situation', question: 'Hvad analyserer PESTEL-modellen?', options: ['Virksomhedens interne forhold', 'Den uafhængige omverden (fjernmiljø)', 'Kundernes købsadfærd', 'Medarbejdernes trivsel'], correct: 1 },
+  { id: 12, topic: 'Den eksterne situation', question: 'Hvad står "E" for i PESTEL?', options: ['Ethics', 'Economic (økonomiske forhold)', 'Equality', 'Energy'], correct: 1 },
+  { id: 13, topic: 'Den eksterne situation', question: 'Hvilke aktører hører til virksomhedens nærmiljø?', options: ['Kun aktionærerne', 'Kunder, konkurrenter og leverandører', 'Politikere og lovgivere', 'Internationale organisationer'], correct: 1 },
+  { id: 14, topic: 'Den eksterne situation', question: 'Hvad er bred konkurrence?', options: ['Konkurrenter der sælger præcis samme produkt', 'Produkter der dækker samme behov, men er forskellige', 'Virksomheder i samme by', 'Konkurrenter i udlandet'], correct: 1 },
+  { id: 15, topic: 'Den eksterne situation', question: 'Hvad beskriver OT-delen i SWOT?', options: ['Interne styrker', 'Interne svagheder', 'Eksterne muligheder og trusler', 'Omsætning og total indtjening'], correct: 2 },
+
+  // === Segmentering og målgrupper ===
+  { id: 16, topic: 'Segmentering og målgrupper', question: 'Hvilken type segmenteringsvariabel er alder?', options: ['Psykografisk', 'Demografisk', 'Adfærdsmæssig', 'Geografisk'], correct: 1 },
+  { id: 17, topic: 'Segmentering og målgrupper', question: 'Hvad er en målgruppe?', options: ['Alle borgere i Danmark', 'Den udvalgte gruppe kunder virksomheden retter sig mod', 'Virksomhedens medarbejdere', 'Konkurrenternes kunder'], correct: 1 },
+  { id: 18, topic: 'Segmentering og målgrupper', question: 'Hvad er forskellen på B2B og B2C?', options: ['B2B sælger til private, B2C til virksomheder', 'B2B sælger til virksomheder, B2C til private forbrugere', 'B2B er online, B2C er fysisk', 'Der er ingen forskel'], correct: 1 },
+  { id: 19, topic: 'Segmentering og målgrupper', question: 'Hvad er en konverteringsrate?', options: ['Antal besøgende på en hjemmeside', 'Andelen af besøgende der foretager en ønsket handling', 'Den samlede omsætning', 'Prisen pr. klik på en annonce'], correct: 1 },
+  { id: 20, topic: 'Segmentering og målgrupper', question: 'Hvad står ROAS for?', options: ['Rate of Active Subscribers', 'Return on Advertising Spend', 'Revenue of All Sales', 'Reach of Advertising Strategy'], correct: 1 },
+
+  // === Marketingmix – de 4 P'er ===
+  { id: 21, topic: 'Marketingmix', question: 'Hvad står USP for?', options: ['Universal Sales Policy', 'Unique Selling Proposition', 'United Service Provider', 'Unit Sales Price'], correct: 1 },
+  { id: 22, topic: 'Marketingmix', question: 'Hvad dækker promotion over i de 4 P\'er?', options: ['Pris og rabatter', 'Reklame og markedskommunikation', 'Distribution af varer', 'Produktudvikling'], correct: 1 },
+  { id: 23, topic: 'Marketingmix', question: 'Hvad er direkte distribution?', options: ['Salg gennem grossister', 'Salg via mange mellemhandlere', 'Salg direkte fra producent til forbruger uden mellemled', 'Salg på auktion'], correct: 2 },
+  { id: 24, topic: 'Marketingmix', question: 'Hvad står AIDA-modellen for?', options: ['Awareness, Information, Decision, Action', 'Attention, Interest, Desire, Action', 'Advertising, Investment, Data, Analysis', 'Attract, Inform, Deliver, Assess'], correct: 1 },
+  { id: 25, topic: 'Marketingmix', question: 'Hvad betyder SEO?', options: ['Sales Engagement Online', 'Søgemaskineoptimering (Search Engine Optimization)', 'Social Engagement Output', 'Special Email Offer'], correct: 1 },
+
+  // === Strategi ===
+  { id: 26, topic: 'Strategi', question: 'Hvilke generiske strategier identificerede Porter?', options: ['Vækst og overlevelse', 'Differentiering, omkostningsleder og fokusstrategier', 'B2B og B2C', 'Online og offline'], correct: 1 },
+  { id: 27, topic: 'Strategi', question: 'Hvad kendetegner en omkostningslederstrategi?', options: ['At have de højeste priser i branchen', 'At have de laveste omkostninger i branchen', 'At sælge unikke produkter', 'At undgå konkurrence'], correct: 1 },
+  { id: 28, topic: 'Strategi', question: 'Hvad beskriver Ansoffs vækstmatrix?', options: ['Fire vækststrategier (fx markedspenetration og produktudvikling)', 'En virksomheds organisation', 'En kundes købsproces', 'Konkurrenternes priser'], correct: 0 },
+  { id: 29, topic: 'Strategi', question: 'Hvad er en virksomheds mission?', options: ['En kortvarig kampagne', 'Det overordnede formål — hvorfor virksomheden findes', 'Det årlige overskud', 'Antallet af medarbejdere'], correct: 1 },
+  { id: 30, topic: 'Strategi', question: 'Hvad er differentieringsstrategi?', options: ['At have lavere priser end konkurrenterne', 'At adskille sig fra konkurrenterne med unikke egenskaber', 'At fjerne alle konkurrenter', 'At kopiere de bedste konkurrenter'], correct: 1 },
+
+  // === Internationalisering ===
+  { id: 31, topic: 'Internationalisering', question: 'Hvad er et typisk motiv for at internationalisere?', options: ['At reducere antal medarbejdere', 'Adgang til nye markeder og vækst', 'At undgå skat', 'At lukke produktionen'], correct: 1 },
+  { id: 32, topic: 'Internationalisering', question: 'Hvad beskriver Hofstedes kulturteori?', options: ['Hvordan man laver reklamer', 'Forskelle mellem nationale kulturer (fx magtdistance)', 'Hvordan en virksomhed bør organiseres', 'Priser i forskellige lande'], correct: 1 },
+  { id: 33, topic: 'Internationalisering', question: 'Hvad er standardisering i international marketing?', options: ['Samme marketingmix på alle markeder', 'Tilpasning til hvert land', 'Kun at sælge i ét land', 'Kun at bruge engelsk i reklamer'], correct: 0 },
+  { id: 34, topic: 'Internationalisering', question: 'Hvad er en indtrængningsstrategi?', options: ['En måde at lukke et marked på', 'Måden virksomheden går ind på et nyt marked', 'En type produkt', 'En reklamekampagne'], correct: 1 },
+  { id: 35, topic: 'Internationalisering', question: 'Hvad menes med lokal tilpasning?', options: ['At ansætte lokale medarbejdere', 'At tilpasse marketingmix til lokale forhold', 'At sænke prisen', 'At bruge lokal valuta'], correct: 1 },
+
+  // === Bæredygtighed og samfundsansvar ===
+  { id: 36, topic: 'Bæredygtighed og samfundsansvar', question: 'Hvad står CSR for?', options: ['Customer Service Rating', 'Corporate Social Responsibility', 'Capital Stock Return', 'Common Sales Report'], correct: 1 },
+  { id: 37, topic: 'Bæredygtighed og samfundsansvar', question: 'Hvad er etisk markedsføring?', options: ['Markedsføring der altid er gratis', 'Markedsføring der tager hensyn til moralske principper', 'Reklame kun på sociale medier', 'Salg kun til store kunder'], correct: 1 },
+  { id: 38, topic: 'Bæredygtighed og samfundsansvar', question: 'Hvad menes med grøn omstilling?', options: ['At male produkter grønne', 'Overgang til mere miljøvenlig produktion og forbrug', 'At skifte logo til en grøn farve', 'At lukke alle fabrikker'], correct: 1 },
+  { id: 39, topic: 'Bæredygtighed og samfundsansvar', question: 'Hvad er bæredygtighedsrapportering?', options: ['En reklame om miljøet', 'Virksomhedens rapportering om miljømæssige og sociale forhold', 'En finansiel årsrapport', 'Et internt nyhedsbrev'], correct: 1 },
+  { id: 40, topic: 'Bæredygtighed og samfundsansvar', question: 'Hvad kendetegner en bæredygtig forretningsmodel?', options: ['At den maksimerer profit uanset alt andet', 'At den balancerer økonomi, miljø og sociale hensyn', 'At den kun fokuserer på miljøet', 'At den helt undgår vækst'], correct: 1 },
+
+  // === Supplerende — dækning af resterende underemner i pensum ===
+  // Markedsanalyse og dataindsamling
+  { id: 41, topic: 'Markedsanalyse og dataindsamling', question: 'Hvad er CATI?', options: ['Computer-Assisted Telephone Interviewing (telefoninterview)', 'En kvalitativ metode', 'En analyse af sociale medier', 'En type fokusgruppe'], correct: 0 },
+  { id: 42, topic: 'Markedsanalyse og dataindsamling', question: 'Hvad er en omnibusanalyse?', options: ['En analyse kun om transport', 'En analyse hvor flere virksomheder deler spørgeskema og omkostninger', 'En analyse over flere år', 'En analyse uden respondenter'], correct: 1 },
+  { id: 43, topic: 'Markedsanalyse og dataindsamling', question: 'Hvad er en panelanalyse?', options: ['En enkeltstående undersøgelse', 'En undersøgelse hvor de samme respondenter følges over tid', 'En analyse af fjernsynspaneler', 'En analyse uden formål'], correct: 1 },
+  { id: 44, topic: 'Markedsanalyse og dataindsamling', question: 'Hvad menes med big data?', options: ['Meget store og komplekse datamængder', 'Et lille spørgeskema', 'Data fra én enkelt kunde', 'Data fra én enkelt kilde'], correct: 0 },
+  { id: 45, topic: 'Markedsanalyse og dataindsamling', question: 'Hvilket trin kommer typisk først i markedsanalyseprocessen?', options: ['Dataindsamling', 'Problemformulering og formål', 'Konklusion og rapport', 'Præsentation af resultater'], correct: 1 },
+
+  // Den interne situation
+  { id: 46, topic: 'Den interne situation', question: 'Hvilke virksomheder er typiske eksempler på disruption?', options: ['Coca-Cola og Pepsi', 'Uber, Airbnb og Netflix', 'Maersk og DSB', 'Nestlé og Unilever'], correct: 1 },
+  { id: 47, topic: 'Den interne situation', question: 'Hvad kendetegner en freemium-forretningsmodel?', options: ['Alt er gratis for altid', 'En basisversion er gratis — brugeren betaler for ekstra funktioner', 'Alle funktioner koster penge fra start', 'Kunderne får løn for at bruge produktet'], correct: 1 },
+  { id: 48, topic: 'Den interne situation', question: 'Hvad er en KPI?', options: ['En type kunde', 'Key Performance Indicator — et nøgletal for præstation', 'En type pris', 'En reklame-platform'], correct: 1 },
+
+  // Den eksterne situation
+  { id: 49, topic: 'Den eksterne situation', question: 'Hvad samler SWOT-analysen?', options: ['Kun interne forhold', 'Kun eksterne forhold', 'Interne (styrker/svagheder) og eksterne (muligheder/trusler) forhold', 'Kun konkurrenternes priser'], correct: 2 },
+
+  // Segmentering og målgrupper
+  { id: 50, topic: 'Segmentering og målgrupper', question: 'Hvorfor er kundeloyalitet vigtig for en virksomhed?', options: ['Loyale kunder køber typisk mere og anbefaler virksomheden videre', 'Det er gratis at få nye kunder', 'Loyale kunder er ligeglade med pris og kvalitet', 'Det har ingen betydning'], correct: 0 },
+  { id: 51, topic: 'Segmentering og målgrupper', question: 'Hvad er et homogent segment?', options: ['Et segment med meget forskellige kunder', 'Et segment hvor kunderne ligner hinanden i adfærd eller behov', 'Et segment kun for B2B', 'Et segment uden kunder'], correct: 1 },
+
+  // Marketingmix
+  { id: 52, topic: 'Marketingmix', question: 'Hvad er dækningsbidrag (DB)?', options: ['Den samlede omsætning', 'Salgspris minus variable omkostninger pr. enhed', 'Skatten af overskuddet', 'Et reklamebudget'], correct: 1 },
+  { id: 53, topic: 'Marketingmix', question: 'Hvad er click and collect?', options: ['En type online-betaling', 'Kunden bestiller online og henter varen i en fysisk butik', 'En reklameform på TikTok', 'En SEO-teknik'], correct: 1 },
+  { id: 54, topic: 'Marketingmix', question: 'Hvad er sales promotion?', options: ['Langsigtet brandopbygning', 'Kortvarige salgsfremmende tiltag som rabat eller konkurrencer', 'En type personligt salg', 'Det samme som PR'], correct: 1 },
+
+  // Strategi
+  { id: 55, topic: 'Strategi', question: 'Hvad beskriver en virksomheds vision?', options: ['Et drømmebillede af, hvor virksomheden vil hen i fremtiden', 'Den daglige drift', 'Et regnskab', 'En enkelt kampagne'], correct: 0 },
+
+  // Internationalisering
+  { id: 56, topic: 'Internationalisering', question: 'Hvad er internationaliseringsgrad?', options: ['Antal sprog virksomheden taler', 'Hvor stor en andel af virksomhedens aktivitet der foregår på internationale markeder', 'Hvor mange medarbejdere der er udlændinge', 'Antal lande man har besøgt'], correct: 1 },
+  { id: 57, topic: 'Internationalisering', question: 'Hvad er formålet med markedsudvælgelse i international marketing?', options: ['At udvælge de mest attraktive lande at gå ind på', 'At lukke eksisterende markeder', 'At hæve priserne', 'At finde nye leverandører'], correct: 0 }
+];
+
+/* =========================================================
+   QUESTION BANK — Erhvervsjura C
+   (efter "Erhvervsjura C & B – juraens grundregler", Systime)
+   ========================================================= */
+const QUESTIONS_ERHVERVSJURA_C = [
+  // === Kapitel 1: Demokrati, etik, moral og jura ===
+  { id: 1,  topic: 'Demokrati, etik og jura', question: 'Hvad er hovedforskellen mellem juridiske regler og etiske normer?', options: ['Etiske normer er altid skrevet ned', 'Juridiske regler kan håndhæves af staten — etiske normer kan ikke', 'Etiske normer er altid strengere end juridiske', 'Juridiske regler gælder kun i erhvervslivet'], correct: 1 },
+  { id: 2,  topic: 'Demokrati, etik og jura', question: 'Hvad er princippet om magtens tredeling?', options: ['Kongen, regeringen og folketinget deler magten', 'Magten er delt mellem den lovgivende, udøvende og dømmende magt', 'EU, Folketinget og kommunerne deler magten', 'Borgerne har tre former for stemmeret'], correct: 1 },
+  { id: 3,  topic: 'Demokrati, etik og jura', question: 'Hvilken konvention beskytter primært menneskerettigheder i Europa?', options: ['FN\'s verdenserklæring', 'Den Europæiske Menneskerettighedskonvention (EMRK)', 'Romtraktaten', 'Helsingforsaftalen'], correct: 1 },
+  { id: 4,  topic: 'Demokrati, etik og jura', question: 'Hvad kendetegner en retsstat?', options: ['Kongen bestemmer alt', 'Magten udøves efter offentligt kendte regler og borgerne har retssikkerhed', 'Der findes ingen domstole', 'Politiet står over loven'], correct: 1 },
+  { id: 5,  topic: 'Demokrati, etik og jura', question: 'Hvad gælder typisk om noget der er etisk forkert, men ikke strafbart?', options: ['Det kan altid straffes med bøde', 'Det kan ikke retsforfølges af staten, men kan have sociale konsekvenser', 'Det fører til fængsel', 'Det er aldrig en del af samfundsdebatten'], correct: 1 },
+
+  // === Kapitel 2: Digital dannelse ===
+  { id: 6,  topic: 'Digital dannelse', question: 'Hvad er hovedformålet med GDPR (Persondataforordningen)?', options: ['At regulere internettets hastighed', 'At beskytte personoplysninger og borgernes ret til privatliv', 'At regulere al reklame', 'At forhindre brug af cookies'], correct: 1 },
+  { id: 7,  topic: 'Digital dannelse', question: 'Hvad kræver GDPR typisk ved brug af cookies på en hjemmeside?', options: ['At hjemmesiden krypterer alt indhold', 'At brugeren giver et aktivt og informeret samtykke', 'At brugeren betaler', 'At cookies kun bruges i Danmark'], correct: 1 },
+  { id: 8,  topic: 'Digital dannelse', question: 'Hvilken handling er typisk strafbar online?', options: ['At dele intime billeder af andre uden deres samtykke', 'At skrive en blog', 'At sende en almindelig e-mail', 'At kommentere på en avisartikel'], correct: 0 },
+  { id: 9,  topic: 'Digital dannelse', question: 'Hvad er cyberkriminalitet?', options: ['Reklame på sociale medier', 'Strafbare handlinger der udføres ved hjælp af it', 'At være meget aktiv online', 'At dele billeder af sig selv'], correct: 1 },
+  { id: 10, topic: 'Digital dannelse', question: 'Hvad menes med platformsansvar?', options: ['At brugeren altid er ansvarlig for sit udstyr', 'At den online platform i et vist omfang kan være ansvarlig for ulovligt indhold', 'At staten betaler for internettet', 'At platforme er helt fritaget for ansvar'], correct: 1 },
+
+  // === Kapitel 3: Retskilder ===
+  { id: 11, topic: 'Retskilder', question: 'Hvad er en retskilde?', options: ['En kilde til drikkevand', 'En kilde man kan udlede gældende ret fra', 'En type domstol', 'En ordbog over fagord'], correct: 1 },
+  { id: 12, topic: 'Retskilder', question: 'Hvilken retskilde står øverst i lovgivningshierarkiet i Danmark?', options: ['Bekendtgørelser', 'Grundloven', 'Cirkulærer', 'Almindelige love'], correct: 1 },
+  { id: 13, topic: 'Retskilder', question: 'Hvad menes med retspraksis som retskilde?', options: ['At domstolenes afgørelser kan have præjudikatværdi', 'At man øver sig i jura', 'Folketingets debatter', 'Politiske aftaler'], correct: 0 },
+  { id: 14, topic: 'Retskilder', question: 'Hvad er sædvaneret?', options: ['En lov der altid har eksisteret', 'Uskrevne regler der er fulgt længe og opfattes som bindende', 'En afgørelse fra Højesteret', 'En EU-forordning'], correct: 1 },
+  { id: 15, topic: 'Retskilder', question: 'Hvor i hierarkiet ligger EU-retten typisk i forhold til national ret?', options: ['Under bekendtgørelser', 'På niveau med kommunale vedtægter', 'Den gælder ikke i Danmark', 'Under grundloven, men over almindelige love'], correct: 3 },
+
+  // === Kapitel 4: Juridisk metode ===
+  { id: 16, topic: 'Juridisk metode', question: 'Hvad er typisk det første trin i den juridiske metode?', options: ['At skrive konklusionen', 'At fastlægge sagens faktum (relevante fakta)', 'Argumentation', 'At skrive en dom'], correct: 1 },
+  { id: 17, topic: 'Juridisk metode', question: 'Hvad menes med "faktum" i en juridisk opgave?', options: ['Selve retsreglerne', 'De konkrete fakta i sagen', 'Konklusionen', 'Dommerens holdning'], correct: 1 },
+  { id: 18, topic: 'Juridisk metode', question: 'Hvad er subsumtion?', options: ['At lede efter en lovparagraf', 'At anvende retsreglen på sagens konkrete faktum', 'At opfinde en ny regel', 'At anke en sag'], correct: 1 },
+  { id: 19, topic: 'Juridisk metode', question: 'Hvad indebærer ordlydsfortolkning?', options: ['At fortolke ud fra lovens hensigt', 'At fortolke ud fra lovens bogstavelige tekst', 'Kun at bruge domstolspraksis', 'At fortolke helt frit'], correct: 1 },
+  { id: 20, topic: 'Juridisk metode', question: 'Hvad er forskellen på faktum og jus?', options: ['Faktum er sagens fakta — jus er retsreglerne', 'De betyder det samme', 'Jus er fakta og faktum er regler', 'Faktum betyder konklusion'], correct: 0 },
+
+  // === Kapitel 5: Det danske retssystem ===
+  { id: 21, topic: 'Det danske retssystem', question: 'Hvilken domstol er øverste instans i Danmark?', options: ['Byretten', 'Højesteret', 'Landsretten', 'Sø- og Handelsretten'], correct: 1 },
+  { id: 22, topic: 'Det danske retssystem', question: 'Hvor starter en almindelig civilsag typisk?', options: ['Højesteret', 'Byretten', 'Landsretten', 'EU-Domstolen'], correct: 1 },
+  { id: 23, topic: 'Det danske retssystem', question: 'Hvad er forskellen på en civilsag og en straffesag?', options: ['Civilsager er strid mellem private — straffesager forfølges af det offentlige mod en sigtet', 'Straffesager handler om ægteskab', 'Civilsager er hurtigere', 'Der er ingen forskel'], correct: 0 },
+  { id: 24, topic: 'Det danske retssystem', question: 'Hvad er voldgift?', options: ['En politisk handling', 'En privat tvistløsning hvor parterne lader en voldgiftsret afgøre sagen', 'En offentlig retssal', 'En type fogedforretning'], correct: 1 },
+  { id: 25, topic: 'Det danske retssystem', question: 'Hvad er retsmægling?', options: ['At politiet mægler', 'En frivillig konfliktløsning hvor en mægler hjælper parterne med at finde en løsning', 'At dommeren afgør sagen alene', 'En anke til Højesteret'], correct: 1 },
+
+  // === Kapitel 6 & 7: Erstatningsret ===
+  { id: 26, topic: 'Erstatningsret', question: 'Hvilke fire betingelser skal alle være opfyldt for at kunne kræve erstatning?', options: ['Culpa, tab, kausalitet og forsæt', 'Ansvarsgrundlag, økonomisk tab, kausalitet og adækvans', 'Uagtsomhed, personskade, forsikring og kausalitet', 'Tab, kausalitet, lov og samtykke'], correct: 1 },
+  { id: 27, topic: 'Erstatningsret', question: 'Hvad er culpa-ansvar?', options: ['Ansvar kun for forsætlige handlinger', 'Ansvar for uagtsom eller forsætlig adfærd', 'Ansvar uden skyld', 'Ansvar for andres handlinger'], correct: 1 },
+  { id: 28, topic: 'Erstatningsret', question: 'Hvad menes med adækvans i erstatningsretten?', options: ['At skaden var påregnelig som følge af handlingen', 'At skadelidte har samme erhverv som skadevolder', 'At skaden er sket samme dag', 'At skadevolder har forsikring'], correct: 0 },
+  { id: 29, topic: 'Erstatningsret', question: 'Hvad er objektivt ansvar?', options: ['Ansvar uden krav om skyld (fx arbejdsgiveransvar eller produktansvar)', 'Et ansvar man frivilligt påtager sig', 'Et ansvar der altid er strafbart', 'Et ansvar kun for fysiske skader'], correct: 0 },
+  { id: 30, topic: 'Erstatningsret', question: 'Hvad er egen skyld i erstatningsretten?', options: ['At skadelidte selv har medvirket til skaden — kan lempe erstatningen', 'At skadevolder undskylder', 'At skadelidte ikke er forsikret', 'At forsikringsselskabet er skyld'], correct: 0 },
+
+  // === Kapitel 8: Forsikringsret ===
+  { id: 31, topic: 'Forsikringsret', question: 'Hvilken type forsikring dækker typisk skader på en bygning eller bil?', options: ['Ansvarsforsikring', 'Tingsforsikring', 'Livsforsikring', 'Ulykkesforsikring'], correct: 1 },
+  { id: 32, topic: 'Forsikringsret', question: 'Hvad dækker en ansvarsforsikring?', options: ['Forsikringstagerens egne ting', 'Det ansvar forsikringstageren får over for tredjemand', 'Sygdom hos forsikringstageren', 'Pension'], correct: 1 },
+  { id: 33, topic: 'Forsikringsret', question: 'Hvad gælder typisk ved dobbeltforsikring?', options: ['Skadelidte får dobbelt erstatning', 'Skadelidte kan kun få det faktiske tab dækket — selskaberne fordeler ansvaret indbyrdes', 'Begge forsikringer er ugyldige', 'Man får 50 % fra hvert selskab uanset tab'], correct: 1 },
+  { id: 34, topic: 'Forsikringsret', question: 'Hvad er forsikringstagerens oplysningspligt?', options: ['Pligt til at fortælle naboen om forsikringen', 'Pligt til at give selskabet korrekte og fyldestgørende oplysninger ved aftaleindgåelsen', 'Pligt til at oplyse om alle skader man har set', 'Pligt til at opsige tidligere forsikringer'], correct: 1 },
+  { id: 35, topic: 'Forsikringsret', question: 'Hvilken forsikring er lovpligtig for danske bilejere?', options: ['Kaskoforsikring', 'Ansvarsforsikring', 'Indboforsikring', 'Ulykkesforsikring'], correct: 1 },
+
+  // === Kapitel 9 & 10: Aftaleret ===
+  { id: 36, topic: 'Aftaleret', question: 'Hvilke to elementer udgør aftalemodellens grundform?', options: ['Tilbud og betaling', 'Tilbud og accept', 'Tilbud og levering', 'Forhandling og underskrift'], correct: 1 },
+  { id: 37, topic: 'Aftaleret', question: 'Hvem er løftegiveren i en aftale?', options: ['Den der afgiver tilbuddet/løftet', 'Den der modtager tilbuddet', 'En mellemmand', 'En domstol'], correct: 0 },
+  { id: 38, topic: 'Aftaleret', question: 'Hvad sker der efter aftalelovens § 4, hvis en accept kommer for sent?', options: ['Aftalen er bindende uden videre', 'Den for sene accept anses som et nyt tilbud', 'Aftalen er strafbar', 'Tilbuddet forlænges automatisk'], correct: 1 },
+  { id: 39, topic: 'Aftaleret', question: 'Hvad er konkludent adfærd?', options: ['At man har skrevet under', 'Adfærd der med rimelighed kan opfattes som accept af et tilbud', 'En udtrykkelig afvisning', 'At man taler om aftalen'], correct: 1 },
+  { id: 40, topic: 'Aftaleret', question: 'Hvordan fortolkes uklare vilkår typisk i en standardkontrakt?', options: ['Altid til forbrugerens skade', 'Imod den part der har udformet kontrakten (contra proferentem)', 'Altid til fordel for forfatteren', 'Vilkåret er altid ugyldigt'], correct: 1 },
+
+  // === Kapitel 11: Fuldmagt ===
+  { id: 41, topic: 'Fuldmagt', question: 'Hvad er en stillingsfuldmagt?', options: ['En fuldmagt der følger af en bestemt stilling (fx en ekspedient i butikken)', 'En skriftlig fuldmagt', 'En fuldmagt fra retten', 'En offentligt bekendtgjort fuldmagt'], correct: 0 },
+  { id: 42, topic: 'Fuldmagt', question: 'Hvad er forskellen på intern og ekstern fuldmagt?', options: ['Intern er bemyndigelsen mellem giver og fuldmægtig — ekstern er det tredjemand kan se', 'Intern er hemmelig, ekstern er offentlig — ellers ingen forskel', 'Der er ingen forskel', 'Ekstern fuldmagt er ulovlig'], correct: 0 },
+  { id: 43, topic: 'Fuldmagt', question: 'Hvornår binder fuldmægtigens handlinger fuldmagtsgiveren?', options: ['Når fuldmægtigen handler inden for sin fuldmagt', 'Altid, uanset om der er bemyndigelse', 'Kun ved skriftlig aftale', 'Kun hvis fuldmægtigen er advokat'], correct: 0 },
+  { id: 44, topic: 'Fuldmagt', question: 'Hvad er en kommissionær?', options: ['En der handler i eget navn, men for en andens regning', 'En kommunalt ansat', 'En politiker', 'En revisor'], correct: 0 },
+  { id: 45, topic: 'Fuldmagt', question: 'Hvad gælder typisk, hvis fuldmægtigen handler uden for sin bemyndigelse?', options: ['Aftalen er altid gyldig', 'Aftalen binder ikke fuldmagtsgiveren, og fuldmægtigen kan blive ansvarlig', 'Fuldmagtsgiveren skal alligevel betale', 'Det er altid strafbart'], correct: 1 },
+
+  // === Kapitel 12: Aftalers ugyldighed ===
+  { id: 46, topic: 'Aftalers ugyldighed', question: 'Hvilken paragraf i aftaleloven omhandler typisk svig?', options: ['§ 28', '§ 30', '§ 36', '§ 4'], correct: 1 },
+  { id: 47, topic: 'Aftalers ugyldighed', question: 'Hvad er forskellen på stærke og svage ugyldighedsgrunde?', options: ['Stærke kan påberåbes også over for godtroende tredjemand — svage kun over for ondtroende', 'Stærke gælder kun for store aftaler', 'Stærke er nyere regler', 'Der er ingen forskel'], correct: 0 },
+  { id: 48, topic: 'Aftalers ugyldighed', question: 'Hvad gør aftalelovens § 36 muligt?', options: ['At tilsidesætte eller ændre urimelige aftaler eller aftalevilkår', 'At alle aftaler er bindende', 'At tilbagekalde alle tilbud frit', 'Kun gælder aftaler i Danmark'], correct: 0 },
+  { id: 49, topic: 'Aftalers ugyldighed', question: 'Hvad er svigtende forudsætninger?', options: ['At parten har glemt aftalen', 'At væsentlige forudsætninger for aftalen brister, hvilket kan medføre ugyldighed', 'At aftalen er for kort', 'At parterne ikke har skrevet under'], correct: 1 },
+  { id: 50, topic: 'Aftalers ugyldighed', question: 'Hvad er typisk konsekvensen af, at en aftale erklæres ugyldig?', options: ['Aftalen står ved magt', 'Parterne skal som udgangspunkt restituere det allerede ydede', 'Man får erstatning af staten', 'Sagen sendes til EU'], correct: 1 },
+
+  // === Kapitel 13 & 14: Forbrugerret ===
+  { id: 51, topic: 'Forbrugerret', question: 'Hvor lang fortrydelsesfrist har en forbruger typisk ved fjernsalg (netkøb)?', options: ['7 dage', '14 dage', '30 dage', '24 timer'], correct: 1 },
+  { id: 52, topic: 'Forbrugerret', question: 'Hvad er negativ aftalebinding?', options: ['At man bindes af en aftale ved blot at undlade at svare — generelt forbudt over for forbrugere', 'En aftale som er negativ for forbrugeren', 'En aftale uden underskrift', 'En aftale med negativt fortegn'], correct: 0 },
+  { id: 53, topic: 'Forbrugerret', question: 'Hvad omfatter den erhvervsdrivendes oplysningspligt før en forbrugeraftale?', options: ['Pligt til at oplyse om medarbejdernes løn', 'Pligt til at oplyse fx pris, fortrydelsesret og virksomhedens identitet', 'Pligt til at oplyse om regnskaber', 'Ingen oplysningspligt'], correct: 1 },
+  { id: 54, topic: 'Forbrugerret', question: 'Hvad er forbuddet mod uanmodet henvendelse?', options: ['Forbud mod at ringe på dørene om søndagen', 'Forbud mod fx telefonisk eller elektronisk markedsføring uden forudgående samtykke', 'Forbud mod at sende post', 'Forbud mod tv-reklame'], correct: 1 },
+  { id: 55, topic: 'Forbrugerret', question: 'Hvad gælder ved misbrug af forbrugerens betalingskort, hvor forbrugeren ikke selv er skyld?', options: ['Forbrugeren hæfter ubegrænset', 'Forbrugeren hæfter typisk med en begrænset selvrisiko — eller slet ikke', 'Forbrugeren skal selv betale alt', 'Banken hæfter aldrig'], correct: 1 },
+
+  // === Kapitel 15: Forbrugerkøb ===
+  { id: 56, topic: 'Forbrugerkøb', question: 'Hvor lang er den almindelige reklamationsfrist i et forbrugerkøb?', options: ['6 måneder', '1 år', '2 år', '5 år'], correct: 2 },
+  { id: 57, topic: 'Forbrugerkøb', question: 'Hvilken misligholdelsesbeføjelse vælges typisk først ved en mangel?', options: ['Ophævelse af handlen', 'Afhjælpning eller omlevering', 'Prisafslag', 'Erstatning uden tab'], correct: 1 },
+  { id: 58, topic: 'Forbrugerkøb', question: 'Hvad betyder 6-måneders-reglen om bevisbyrde?', options: ['Forbrugeren skal bevise alt selv', 'Hvis en mangel viser sig inden 6 måneder efter levering, formodes den at have været til stede ved leveringen', 'Sælger har 6 måneder til at reklamere', 'Reklamation skal ske inden 6 måneder'], correct: 1 },
+  { id: 59, topic: 'Forbrugerkøb', question: 'Hvad er en retlig mangel?', options: ['At varen er ulovlig på markedet eller belastet af tredjemands rettigheder', 'At varen er gået i stykker', 'At sælger har glemt at sende varen', 'At varen ikke har den ønskede farve'], correct: 0 },
+  { id: 60, topic: 'Forbrugerkøb', question: 'Hvad er forbrugerens hovedpligt i et køb?', options: ['At betale købesummen', 'At reklamere', 'At pakke varen ind', 'At returnere varen'], correct: 0 },
+
+  // === Kapitel 16: Markedsføringsret ===
+  { id: 61, topic: 'Markedsføringsret', question: 'Hvilken myndighed fører tilsyn med markedsføringsloven?', options: ['Skattestyrelsen', 'Forbrugerombudsmanden', 'Politiet', 'Datatilsynet'], correct: 1 },
+  { id: 62, topic: 'Markedsføringsret', question: 'Hvad kræver god markedsføringsskik typisk om reklame?', options: ['At den skal være kort', 'At den ikke må være vildledende eller utilbørlig', 'At den altid skal være på dansk', 'At den skal være gratis'], correct: 1 },
+  { id: 63, topic: 'Markedsføringsret', question: 'Hvad skal en influencer typisk gøre, når et opslag er reklame?', options: ['Skjule det', 'Tydeligt mærke det som reklame/annonce', 'Bruge engelsk', 'Det er underordnet'], correct: 1 },
+  { id: 64, topic: 'Markedsføringsret', question: 'Hvornår er sammenlignende reklame som udgangspunkt lovlig?', options: ['Når den er objektiv, sandfærdig og ikke vildledende', 'Den er altid forbudt', 'Kun mellem ikke-konkurrenter', 'Kun i tv'], correct: 0 },
+  { id: 65, topic: 'Markedsføringsret', question: 'Hvad gælder typisk om markedsføring rettet mod børn?', options: ['Den må gerne være vildledende over for børn', 'Der er skærpede krav — fx må reklamen ikke direkte opfordre børn til at købe', 'Den er fuldstændigt forbudt', 'Den er fritaget for alle regler'], correct: 1 },
+
+  // === Kapitel 17: Handelskøb ===
+  { id: 66, topic: 'Handelskøb', question: 'Hvad er et handelskøb?', options: ['Et køb mellem to private', 'Et køb hvor begge parter handler som led i erhverv', 'Et køb foretaget i udlandet', 'Et køb mellem stat og borger'], correct: 1 },
+  { id: 67, topic: 'Handelskøb', question: 'Hvad er en af køberens hovedpligter i et handelskøb?', options: ['At reklamere uanset om der er fejl', 'At betale købesummen og undersøge varen efter modtagelse', 'At returnere varen efter 14 dage', 'At opbevare varen i 5 år'], correct: 1 },
+  { id: 68, topic: 'Handelskøb', question: 'Hvilken misligholdelsesbeføjelse forudsætter typisk væsentlig misligholdelse?', options: ['Afhjælpning', 'Prisafslag', 'Ophævelse', 'Erstatning'], correct: 2 },
+  { id: 69, topic: 'Handelskøb', question: 'Hvornår overgår risikoen typisk til køber i et handelskøb?', options: ['Ved bestilling', 'Ved levering (når varen er overgivet til køber)', 'Ved betaling', 'Risikoen er hos sælger indtil varen er forbrugt'], correct: 1 },
+  { id: 70, topic: 'Handelskøb', question: 'Hvad er typisk konsekvensen, hvis køber uberettiget nægter at modtage varen?', options: ['Sælger skal beholde varen gratis', 'Sælger kan kræve erstatning og/eller fastholde aftalen', 'Aftalen er ugyldig', 'Sælger skal levere igen'], correct: 1 },
+
+  // === Kapitel 18: Kreditret (overblik) ===
+  { id: 71, topic: 'Kreditret', question: 'Hvad er kreditret overordnet?', options: ['Reglerne om låneaftaler, kreditkøb og sikkerhedsstillelse', 'Reglerne om at have et betalingskort', 'Reglerne om bankkonti', 'Reglerne om aktiehandel'], correct: 0 },
+  { id: 72, topic: 'Kreditret', question: 'Hvem er kreditor i en kreditaftale?', options: ['Den der skylder penge', 'Den der har et tilgodehavende — typisk långiveren', 'En tilfældig tredjepart', 'Staten'], correct: 1 },
+  { id: 73, topic: 'Kreditret', question: 'Hvad er debitor?', options: ['Den der låner penge ud', 'Den der skylder penge', 'En bank', 'En fogedretsmedarbejder'], correct: 1 },
+  { id: 74, topic: 'Kreditret', question: 'Hvad bruges sikkerhedsstillelse til i kreditretten?', options: ['At give kreditor sikkerhed for sit krav, hvis debitor ikke betaler', 'At gøre kreditten gratis', 'At ophæve aftalen', 'At gøre debitor til ejer af kreditors aktiver'], correct: 0 },
+
+  // === Kapitel 19: Kreditaftaler ===
+  { id: 75, topic: 'Kreditaftaler', question: 'Hvad står ÅOP for?', options: ['Årlige Omkostninger i Procent', 'Årligt Overskud Pr. lån', 'Årlig Opkrævningspris', 'Almindelig Omkostningsprocent'], correct: 0 },
+  { id: 76, topic: 'Kreditaftaler', question: 'Hvad oplyser ÅOP forbrugeren om?', options: ['De samlede årlige omkostninger ved kreditten udtrykt i procent', 'Hvor meget banken tjener', 'Renten på sparekontoen', 'Kun stiftelsesomkostninger'], correct: 0 },
+  { id: 77, topic: 'Kreditaftaler', question: 'Hvilken ret har en forbruger typisk efter at have indgået en kreditaftale?', options: ['Ingen rettigheder', '14 dages fortrydelsesret', '30 dages fortrydelsesret', 'Livsvarig fortrydelsesret'], correct: 1 },
+  { id: 78, topic: 'Kreditaftaler', question: 'Hvad skal en forbrugerkreditaftale typisk indeholde?', options: ['Kun renten', 'Bl.a. kreditbeløb, rente, ÅOP, samlede omkostninger og parternes navne', 'Kun forbrugerens navn', 'Ingen særlige krav'], correct: 1 },
+  { id: 79, topic: 'Kreditaftaler', question: 'Hvad er kreditsikring i forbrugerforhold ofte?', options: ['Et forsikringsselskab', 'Sikkerhed for kreditors krav, fx pant eller kaution', 'En type opsparing', 'En aktiehandel'], correct: 1 },
+
+  // === Kapitel 20: Ejendomsforbehold ===
+  { id: 80, topic: 'Ejendomsforbehold', question: 'Hvad er et ejendomsforbehold?', options: ['At sælger forbeholder sig ejendomsretten til varen indtil købesummen er betalt', 'At køber ejer varen fra begyndelsen', 'At staten ejer varen', 'At varen automatisk overgår efter 1 år'], correct: 0 },
+  { id: 81, topic: 'Ejendomsforbehold', question: 'Hvad er en betingelse for et gyldigt ejendomsforbehold?', options: ['Det skal aftales mundtligt', 'Det skal aftales skriftligt ved aftalens indgåelse', 'Det skal tinglyses for alle varer', 'Det aftales efter levering'], correct: 1 },
+  { id: 82, topic: 'Ejendomsforbehold', question: 'Hvad er en betingelse for, at sælger kan tage varen tilbage?', options: ['At køber er flyttet', 'Bl.a. at der er en reel restgæld og at køber har misligholdt', 'At varen er over 1 år gammel', 'At sælger blot er utilfreds'], correct: 1 },
+  { id: 83, topic: 'Ejendomsforbehold', question: 'Hvad sker der ved opgørelse ved tilbagetagelse?', options: ['Køber får alle pengene tilbage', 'Varens værdi modregnes restgælden, og over-/underskud afregnes mellem parterne', 'Sælger beholder alt uden afregning', 'Køber skal betale fuld pris'], correct: 1 },
+
+  // === Kapitel 21: Pant ===
+  { id: 84, topic: 'Pant', question: 'Hvad er en panteret?', options: ['En ret til at få varen udleveret', 'En sikkerhedsret i et aktiv, der kan realiseres hvis fordringen ikke betales', 'En forsikring', 'En lejekontrakt'], correct: 1 },
+  { id: 85, topic: 'Pant', question: 'Hvad er håndpant?', options: ['Pant hvor pantsætter beholder pantet', 'Pant hvor panthaver får rådighed over pantet (fx en guldring hos pantelåneren)', 'Pant i fast ejendom', 'En type aktie'], correct: 1 },
+  { id: 86, topic: 'Pant', question: 'Hvad er underpant?', options: ['Pant hvor panthaver fysisk har pantet', 'Pant hvor pantsætter beholder rådigheden over aktivet (fx bil, hus), men hvor panthaver har sikkerhed', 'En underleverandøraftale', 'Ingen sikkerhed'], correct: 1 },
+  { id: 87, topic: 'Pant', question: 'Hvad er en sikringsakt?', options: ['En handling der gør pantet beskyttet over for tredjemand (fx tinglysning eller rådighedsberøvelse)', 'At lukke pantet inde i et skab', 'At forsikre pantet', 'En politianmeldelse'], correct: 0 },
+
+  // === Kapitel 22: Tinglysning ===
+  { id: 88, topic: 'Tinglysning', question: 'Hvad er tinglysning?', options: ['At sætte et skilt op på et hus', 'At registrere rettigheder over fx fast ejendom eller biler offentligt', 'At klistre en label på en vare', 'At ringe en klokke'], correct: 1 },
+  { id: 89, topic: 'Tinglysning', question: 'I hvilken bog tinglyses fast ejendom?', options: ['Personbogen', 'Tingbogen', 'Bilbogen', 'Andelsboligbogen'], correct: 1 },
+  { id: 90, topic: 'Tinglysning', question: 'I hvilken bog tinglyses rettigheder over biler?', options: ['Tingbogen', 'Bilbogen', 'Personbogen', 'Andelsboligbogen'], correct: 1 },
+  { id: 91, topic: 'Tinglysning', question: 'Hvad er retsvirkningen af tinglysning?', options: ['Ingen retsvirkning', 'Beskyttelse mod godtroende aftaleerhververe og kreditorer', 'Skattefradrag', 'Lavere rente'], correct: 1 },
+  { id: 92, topic: 'Tinglysning', question: 'Hvad gælder typisk om prioriteten mellem flere panterettigheder i samme aktiv?', options: ['Den der er tinglyst først, har bedst prioritet', 'Den nyeste har første prioritet', 'Alle er ligestillede', 'Den med størst krav har første prioritet'], correct: 0 },
+
+  // === Kapitel 23: Fysiske personers hæftelse ===
+  { id: 93, topic: 'Hæftelse', question: 'Hvad er direkte og personlig hæftelse?', options: ['Man hæfter kun gennem et selskab', 'Man hæfter med hele sin personlige formue for gælden', 'Man hæfter slet ikke', 'Staten hæfter'], correct: 1 },
+  { id: 94, topic: 'Hæftelse', question: 'Hvad er udgangspunktet om formueforholdet mellem ægtefæller i Danmark?', options: ['Fuldstændigt særeje', 'Formuefællesskab (delingsformue)', 'Den der tjener mest, ejer alt', 'Det reguleres af kommunen'], correct: 1 },
+  { id: 95, topic: 'Hæftelse', question: 'Hvad er særeje?', options: ['En del af formuen der ikke skal deles ved separation/skilsmisse', 'En type pant', 'En lejebolig', 'En aktiepost'], correct: 0 },
+  { id: 96, topic: 'Hæftelse', question: 'Hvad gælder typisk ved papirløst samliv?', options: ['Man har samme automatiske retsstilling som ægtefæller', 'Der er ingen automatisk formuemæssig retsbeskyttelse — parterne må selv aftale', 'Man arver hinanden automatisk', 'Man hæfter solidarisk for alt'], correct: 1 },
+
+  // === Kapitel 24: Inkasso og fogedret ===
+  { id: 97,  topic: 'Inkasso og fogedret', question: 'Hvad er en inkassovirksomhed?', options: ['En virksomhed der inddriver pengetilgodehavender for andre', 'Et forsikringsselskab', 'En domstol', 'En bank'], correct: 0 },
+  { id: 98,  topic: 'Inkasso og fogedret', question: 'Hvad er et eksekutionsgrundlag?', options: ['Et grundlag for at få fogedretten til at hjælpe med at gennemtvinge et krav (fx dom eller frivilligt forlig)', 'En lejekontrakt', 'Et forsikringsbevis', 'En kvittering'], correct: 0 },
+  { id: 99,  topic: 'Inkasso og fogedret', question: 'Hvad er trangsbeneficiet?', options: ['En skat på små formuer', 'De aktiver fogedretten ikke må tage udlæg i, så skyldneren kan opretholde en beskeden levefod', 'En social ydelse', 'En type pant'], correct: 1 },
+  { id: 100, topic: 'Inkasso og fogedret', question: 'Hvad er en tvangsauktion?', options: ['En privat salgsaftale', 'En offentlig auktion hvor fx fast ejendom sælges for at indfri kreditorerne', 'En frivillig aftale', 'Et privat salg på sociale medier'], correct: 1 },
+  { id: 101, topic: 'Inkasso og fogedret', question: 'Hvad er et fogedforbud?', options: ['Et forbud mod at gå i fogedretten', 'Et foreløbigt retsmiddel der forbyder en part at foretage bestemte handlinger', 'Et generelt forbud mod gæld', 'En politianmeldelse'], correct: 1 }
+];
+
+/* =========================================================
+   QUESTION BANK — Virksomhedsøkonomi B
+   (efter "Virksomhedsøkonomi B til EUX")
+   ========================================================= */
+const QUESTIONS_VIRKSOMHEDSOEKONOMI_B = [
+  // === Kapitel 1: Opstart af virksomhed ===
+  { id: 1,  topic: 'Opstart af virksomhed', question: 'Hvad kendetegner en god forretningsidé?', options: ['Den er kompliceret og svær at forklare', 'Den løser et reelt problem eller behov og er gennemførlig', 'Den er en direkte kopi af konkurrenten', 'Den kræver mange penge at starte'], correct: 1 },
+  { id: 2,  topic: 'Opstart af virksomhed', question: 'Hvad er forskellen på en opfindelse og innovation?', options: ['Det er det samme', 'En opfindelse er en ny idé/teknologi; innovation er at omsætte den til værdi på markedet', 'Innovation er kun digitalt', 'Opfindelser sker kun på universiteter'], correct: 1 },
+  { id: 3,  topic: 'Opstart af virksomhed', question: 'Hvad er en start-up?', options: ['En nystartet virksomhed der ofte har en innovativ idé og søger hurtig vækst', 'En etableret virksomhed', 'En offentlig myndighed', 'En forening'], correct: 0 },
+  { id: 4,  topic: 'Opstart af virksomhed', question: 'Hvilket motiv ses oftest hos iværksættere?', options: ['At undgå skat', 'Selvrealisering, frihed eller at løse et problem', 'At blive berømt', 'At blive politiker'], correct: 1 },
+
+  // === Kapitel 2: Virksomhedstyper og ejerformer ===
+  { id: 5,  topic: 'Virksomhedstyper og ejerformer', question: 'Hvad kendetegner en handelsvirksomhed?', options: ['Den producerer egne varer', 'Den køber varer og videresælger dem uden væsentlig forarbejdning', 'Den leverer kun rådgivning', 'Den producerer maskiner'], correct: 1 },
+  { id: 6,  topic: 'Virksomhedstyper og ejerformer', question: 'Hvad er hovedforskellen på en enkeltmandsvirksomhed og et ApS?', options: ['Der er ingen forskel', 'I enkeltmandsvirksomheden hæfter ejeren personligt og ubegrænset; i et ApS er hæftelsen begrænset til selskabskapitalen', 'ApS må kun drive servicevirksomhed', 'Enkeltmandsvirksomhed kræver flere ejere'], correct: 1 },
+  { id: 7,  topic: 'Virksomhedstyper og ejerformer', question: 'Hvad er minimumskapitalkravet for at stifte et ApS i Danmark (efter 2019)?', options: ['0 kr.', '20.000 kr.', '50.000 kr.', '400.000 kr.'], correct: 1 },
+  { id: 8,  topic: 'Virksomhedstyper og ejerformer', question: 'Hvad er begrænset hæftelse?', options: ['Ejeren hæfter med hele sin private formue', 'Ejeren hæfter kun med det indskudte kapitalbeløb', 'Ejeren hæfter slet ikke', 'Staten hæfter'], correct: 1 },
+  { id: 9,  topic: 'Virksomhedstyper og ejerformer', question: 'Hvad kendetegner en produktionsvirksomhed?', options: ['Den fremstiller varer', 'Den udfører revision', 'Den er grossist', 'Den klipper hår'], correct: 0 },
+
+  // === Kapitel 3: Virksomhedens økonomi ===
+  { id: 10, topic: 'Virksomhedens økonomi', question: 'Hvad viser en resultatopgørelse?', options: ['Virksomhedens aktiver', 'Virksomhedens indtægter og omkostninger over en periode', 'Skat for året', 'Ejerens privatformue'], correct: 1 },
+  { id: 11, topic: 'Virksomhedens økonomi', question: 'Hvad viser en balance?', options: ['Indtægter og udgifter for året', 'Virksomhedens aktiver og passiver på et bestemt tidspunkt', 'Antallet af medarbejdere', 'Markedsandelen'], correct: 1 },
+  { id: 12, topic: 'Virksomhedens økonomi', question: 'Hvad er det økonomiske kredsløb?', options: ['Et regnskab', 'Sammenhængen mellem ressourcer, aktiviteter og økonomiske strømme i en virksomhed', 'Et bankprodukt', 'En type lån'], correct: 1 },
+  { id: 13, topic: 'Virksomhedens økonomi', question: 'Hvad er forskellen på makro- og mikroniveau?', options: ['Makro handler om store virksomheder, mikro om små', 'Makro handler om samfundsøkonomi, mikro om den enkelte virksomhed eller forbruger', 'De er det samme', 'Mikro handler kun om international handel'], correct: 1 },
+
+  // === Kapitel 4: Indtægter og omkostninger ===
+  { id: 14, topic: 'Indtægter og omkostninger', question: 'Hvad er forskellen på en indtægt og en indbetaling?', options: ['De er det samme', 'Indtægten opstår ved levering; indbetalingen er, når pengene faktisk modtages', 'Indbetaling er kun kontant betaling', 'Indtægter opstår kun ved salg af varer'], correct: 1 },
+  { id: 15, topic: 'Indtægter og omkostninger', question: 'Hvad er en kapacitetsomkostning (fast omkostning)?', options: ['En omkostning der varierer med antallet af enheder', 'En fast omkostning der ikke umiddelbart varierer med produktionen (fx husleje)', 'En omkostning til materialer pr. enhed', 'En engangsudbetaling'], correct: 1 },
+  { id: 16, topic: 'Indtægter og omkostninger', question: 'Hvad er en variabel omkostning?', options: ['En omkostning der varierer i takt med produktionen eller afsætningen', 'En fast omkostning', 'En engangsudbetaling', 'En type skat'], correct: 0 },
+  { id: 17, topic: 'Indtægter og omkostninger', question: 'Hvad er forskellen på en omkostning og en udbetaling?', options: ['De er det samme', 'Omkostningen er forbruget af et gode i en periode; udbetalingen er, når pengene faktisk forlader virksomheden', 'Udbetaling er kun løn', 'Omkostning gælder kun varekøb'], correct: 1 },
+  { id: 18, topic: 'Indtægter og omkostninger', question: 'Hvad er bidragskalkulation?', options: ['En metode hvor man kun medregner variable enhedsomkostninger og opgør dækningsbidraget', 'En kalkulation der fordeler alle omkostninger på enheden', 'En lønberegning', 'En kalkulation kun for offentlige virksomheder'], correct: 0 },
+
+  // === Kapitel 5: Virksomhedens indtjening ===
+  { id: 19, topic: 'Virksomhedens indtjening', question: 'Hvad er formlen for dækningsbidrag pr. enhed?', options: ['Salgspris × variable omkostninger', 'Salgspris – variable enhedsomkostninger', 'Omsætning / antal enheder', 'Resultat / antal enheder'], correct: 1 },
+  { id: 20, topic: 'Virksomhedens indtjening', question: 'Hvad er formlen for dækningsgraden?', options: ['(Salgspris × variable enhedsomk.) / Omsætning × 100', 'Dækningsbidrag i alt / Omsætning × 100', 'Omsætning / Kapacitetsomkostninger × 100', 'Resultat / Omsætning × 100'], correct: 1 },
+  { id: 21, topic: 'Virksomhedens indtjening', question: 'Hvad er nulpunktsomsætningen?', options: ['Omsætningen ved nul produktion', 'Den omsætning hvor virksomheden netop dækker sine samlede omkostninger (resultat = 0)', 'Skattepligtig omsætning', 'Den maksimale omsætning'], correct: 1 },
+  { id: 22, topic: 'Virksomhedens indtjening', question: 'Hvad sker der, hvis dækningsgraden falder, mens kapacitetsomkostningerne er uændrede?', options: ['Resultatet stiger', 'Nulpunktsomsætningen stiger, og indtjeningen forværres ved samme afsætning', 'Det har ingen effekt', 'De variable omkostninger forsvinder'], correct: 1 },
+  { id: 23, topic: 'Virksomhedens indtjening', question: 'Hvad er bruttoavanceprocenten?', options: ['(Bruttoavance / Omsætning) × 100 — viser hvor stor en andel af omsætningen der er tilbage efter vareforbrug', 'Variable omkostninger / Faste omkostninger', '(Egenkapital / Aktiver) × 100', '(Resultat / Aktiver) × 100'], correct: 0 },
+
+  // === Kapitel 6: Forretningsplan og forretningsmodel ===
+  { id: 24, topic: 'Forretningsplan', question: 'Hvad er formålet med en forretningsplan?', options: ['At beskrive forretningens idé, marked, drift og økonomi som beslutningsgrundlag', 'At være et regnskab', 'At være et CV', 'At være en juridisk kontrakt'], correct: 0 },
+  { id: 25, topic: 'Forretningsplan', question: 'Hvilke tre hovedbudgetter indgår typisk i en forretningsplan?', options: ['Resultatbudget, balancebudget og likviditetsbudget', 'Vækstbudget, skattebudget og lønbudget', 'Salgsbudget, indkøbsbudget og produktionsbudget', 'Kun salgsbudgettet'], correct: 0 },
+  { id: 26, topic: 'Forretningsplan', question: 'Hvor mange byggesten består Business Model Canvas af?', options: ['5', '7', '9', '12'], correct: 2 },
+  { id: 27, topic: 'Forretningsplan', question: 'Hvad viser et likviditetsbudget?', options: ['Forventede ind- og udbetalinger over en periode', 'Virksomhedens aktiver', 'Renteomkostninger isoleret', 'Antallet af medarbejdere'], correct: 0 },
+
+  // === Kapitel 7: Interessenter ===
+  { id: 28, topic: 'Interessenter', question: 'Hvem er typisk interessenter i en virksomhed?', options: ['Kun ejerne', 'Ejere, medarbejdere, kunder, leverandører, kreditorer, staten og lokalsamfundet', 'Kun kunderne', 'Kun staten'], correct: 1 },
+  { id: 29, topic: 'Interessenter', question: 'Hvad er forskellen på shareholder value og stakeholder value?', options: ['Shareholder value fokuserer kun på aktionærerne; stakeholder value på alle interessenter', 'De betyder det samme', 'Stakeholder value fokuserer kun på medarbejdere', 'Shareholder value er ulovligt'], correct: 0 },
+  { id: 30, topic: 'Interessenter', question: 'Hvad er en interessentkonflikt?', options: ['Når to virksomheder konkurrerer', 'Når forskellige interessenter har modstridende interesser i forhold til virksomheden', 'En strejke', 'En aktiehandel'], correct: 1 },
+  { id: 31, topic: 'Interessenter', question: 'Hvilken interessent er primært interesseret i at få sit krav indfriet?', options: ['Kunden', 'Kreditor (långiver)', 'Medarbejderen', 'Lokalsamfundet'], correct: 1 },
+
+  // === Kapitel 8: Vækst ===
+  { id: 32, topic: 'Vækst', question: 'Hvad menes med organisk vækst?', options: ['Vækst gennem opkøb af andre virksomheder', 'Vækst skabt af egen aktivitet (fx flere kunder, nye produkter eller markeder)', 'Vækst i naturen', 'En vækstrate på 0 %'], correct: 1 },
+  { id: 33, topic: 'Vækst', question: 'Hvad er forskellen på vision og mission?', options: ['Visionen er drømmen om fremtiden; missionen er virksomhedens formål her og nu', 'De er det samme', 'Vision er et regnskabsbegreb', 'Mission gælder kun for offentlige virksomheder'], correct: 0 },
+  { id: 34, topic: 'Vækst', question: 'Hvad kaldes vækst i en virksomheds samlede omsætning?', options: ['Bundlinje-vækst', 'Toplinje-vækst (omsætningsvækst)', 'Lagervækst', 'Renteforhøjelse'], correct: 1 },
+  { id: 35, topic: 'Vækst', question: 'Hvad kendetegner en højvækstvirksomhed?', options: ['En virksomhed med faldende omsætning', 'En virksomhed med høj og vedvarende omsætnings- eller medarbejdervækst over flere år', 'En virksomhed uden medarbejdere', 'En offentlig myndighed'], correct: 1 },
+
+  // === Kapitel 9: Årsregnskab og registreringssystemet ===
+  { id: 36, topic: 'Årsregnskab', question: 'Hvilken lov regulerer bogføringen i danske virksomheder?', options: ['Skatteloven', 'Bogføringsloven', 'Selskabsloven', 'Aftaleloven'], correct: 1 },
+  { id: 37, topic: 'Årsregnskab', question: 'Hvad er omsætningsaktiver?', options: ['Aktiver virksomheden bruger varigt (fx bygninger)', 'Aktiver der løbende omsættes (fx varelager og tilgodehavender)', 'Selskabets gæld', 'Egenkapitalen'], correct: 1 },
+  { id: 38, topic: 'Årsregnskab', question: 'Hvad er passiverne i balancen?', options: ['Egenkapital og gæld — det der finansierer aktiverne', 'Indtægter', 'Variable omkostninger', 'Antal medarbejdere'], correct: 0 },
+  { id: 39, topic: 'Årsregnskab', question: 'Hvad er anlægsaktiver?', options: ['Varer på lager', 'Aktiver bestemt til varig brug i virksomheden (fx bygninger, maskiner)', 'Korte tilgodehavender', 'Likvider'], correct: 1 },
+
+  // === Kapitel 10: Det samlede regnskabssystem ===
+  { id: 40, topic: 'Regnskabssystemet', question: 'Hvad er afskrivninger?', options: ['At nedskrive lagervarens pris', 'Periodisering af et anlægsaktivs anskaffelsessum over dens forventede levetid', 'At slette en debitor', 'At hæve aktiekapitalen'], correct: 1 },
+  { id: 41, topic: 'Regnskabssystemet', question: 'Hvad er periodisering?', options: ['At fordele en indtægt eller omkostning til den periode den vedrører', 'At udskyde alle betalinger', 'At opkræve husleje', 'At udvide regnskabsåret'], correct: 0 },
+  { id: 42, topic: 'Regnskabssystemet', question: 'Hvad er en kontoplan?', options: ['En oversigt over alle de konti virksomheden bruger i bogføringen', 'En oversigt over bankforbindelser', 'En oversigt over de ansattes løn', 'En tabel over priser'], correct: 0 },
+  { id: 43, topic: 'Regnskabssystemet', question: 'Hvad sker der typisk ved regnskabsafslutning?', options: ['Virksomheden lukker', 'Regnskabsperioden afsluttes med afskrivninger, periodisering og opgørelse af resultat', 'Virksomheden sælges', 'Ejerformen skifter'], correct: 1 },
+
+  // === Kapitel 11: Årsrapporten ===
+  { id: 44, topic: 'Årsrapporten', question: 'Hvilken lov regulerer årsrapporten i Danmark?', options: ['Bogføringsloven', 'Årsregnskabsloven', 'Aftaleloven', 'Selskabsloven'], correct: 1 },
+  { id: 45, topic: 'Årsrapporten', question: 'Hvilken regnskabsklasse har de laveste krav til årsrapporten?', options: ['A', 'B', 'C', 'D'], correct: 0 },
+  { id: 46, topic: 'Årsrapporten', question: 'Hvad betyder going concern-forudsætningen?', options: ['At virksomheden er på vej til at lukke', 'At regnskabet aflægges under forudsætning af, at virksomheden fortsætter sin drift', 'At man kun bogfører kontant', 'At regnskabet er på engelsk'], correct: 1 },
+  { id: 47, topic: 'Årsrapporten', question: 'Hvad er en ledelsesberetning?', options: ['Et afsnit i årsrapporten hvor ledelsen redegør for virksomhedens udvikling og forhold', 'Et brev fra revisor', 'En vedtægt', 'Et budget'], correct: 0 },
+  { id: 48, topic: 'Årsrapporten', question: 'Hvad viser pengestrømsopgørelsen?', options: ['Egenkapitalens fordeling', 'Virksomhedens ind- og udbetalinger fordelt på drift, investering og finansiering', 'Antallet af ansatte', 'Skattetilsvaret'], correct: 1 },
+
+  // === Kapitel 12: Økonomiske analyser ===
+  { id: 49, topic: 'Økonomiske analyser', question: 'Hvad er et nøgletal?', options: ['Et forholdstal der sætter regnskabsposter i forhold til hinanden og giver økonomisk indsigt', 'Et almindeligt antal', 'Et kontonummer', 'En lønstigning'], correct: 0 },
+  { id: 50, topic: 'Økonomiske analyser', question: 'Hvad er forskellen på tidssammenligning og virksomhedssammenligning?', options: ['Tidssammenligning ser på udviklingen over tid; virksomhedssammenligning sammenholder med andre virksomheder', 'De er det samme', 'Tidssammenligning er kun for store virksomheder', 'Virksomhedssammenligning er ulovligt'], correct: 0 },
+  { id: 51, topic: 'Økonomiske analyser', question: 'Hvad er et indekstal?', options: ['Et tal hvor en udvikling sættes i forhold til et basisår (=100)', 'Et stort tal', 'En type rente', 'Et momsbeløb'], correct: 0 },
+  { id: 52, topic: 'Økonomiske analyser', question: 'Hvad er et krav til et validt nøgletal?', options: ['At det er beregnet på korrekt grundlag og måler det rigtige', 'At det er pænt afrundet', 'At det altid er positivt', 'At det altid er negativt'], correct: 0 },
+
+  // === Kapitel 13: Analyse af indtjeningsevnen ===
+  { id: 53, topic: 'Indtjeningsevne', question: 'Hvad er formlen for overskudsgraden?', options: ['(Resultat af primær drift / Nettoomsætning) × 100', '(Nettoomsætning / Resultat) × 100', '(Resultat / Aktiver) × 100', '(Egenkapital / Resultat) × 100'], correct: 0 },
+  { id: 54, topic: 'Indtjeningsevne', question: 'Hvad viser overskudsgraden?', options: ['Hvor stor en andel af omsætningen der bliver til resultat af primær drift', 'Egenkapitalens forrentning', 'Antallet af kunder', 'Lagerets størrelse'], correct: 0 },
+  { id: 55, topic: 'Indtjeningsevne', question: 'Hvad kan typisk øge overskudsgraden?', options: ['Højere salgspriser eller lavere omkostninger', 'Højere skat', 'Lavere salgspriser uden tilsvarende omkostningsfald', 'Højere lønninger'], correct: 0 },
+  { id: 56, topic: 'Indtjeningsevne', question: 'Hvad betyder en faldende overskudsgrad fra år til år?', options: ['Indtjeningsevnen forværres pr. omsætningskrone', 'Indtjeningsevnen forbedres', 'Likviditeten stiger automatisk', 'Soliditeten stiger automatisk'], correct: 0 },
+
+  // === Kapitel 14: Kapitaltilpasningsevne ===
+  { id: 57, topic: 'Kapitaltilpasningsevne', question: 'Hvad er formlen for aktivernes omsætningshastighed?', options: ['Nettoomsætning / Gennemsnitlige aktiver', 'Resultat / Aktiver', 'Egenkapital / Aktiver', 'Omsætning / Egenkapital'], correct: 0 },
+  { id: 58, topic: 'Kapitaltilpasningsevne', question: 'Hvad viser aktivernes omsætningshastighed?', options: ['Hvor effektivt aktiverne udnyttes til at skabe omsætning', 'Hvor mange ansatte der er', 'Lønudgiften pr. medarbejder', 'Skatteprocenten'], correct: 0 },
+  { id: 59, topic: 'Kapitaltilpasningsevne', question: 'Hvad betyder en højere omsætningshastighed typisk?', options: ['Aktiverne genererer mere omsætning pr. krone (typisk positivt)', 'Virksomheden går mod konkurs', 'Soliditeten falder', 'Skatten stiger'], correct: 0 },
+  { id: 60, topic: 'Kapitaltilpasningsevne', question: 'Hvilken sammenhæng er der mellem afkastningsgraden og aktivernes omsætningshastighed?', options: ['Afkastningsgrad = Overskudsgrad × Aktivernes omsætningshastighed', 'De er uafhængige af hinanden', 'Afkastningsgrad = Aktiver / Omsætning', 'De er det samme tal'], correct: 0 },
+
+  // === Kapitel 15: Rentabilitet ===
+  { id: 61, topic: 'Rentabilitet', question: 'Hvad er formlen for afkastningsgraden (AG)?', options: ['(Resultat før finansielle omkostninger / Gennemsnitlige aktiver) × 100', '(Omsætning / Aktiver) × 100', '(Resultat / Egenkapital) × 100', '(Egenkapital / Aktiver) × 100'], correct: 0 },
+  { id: 62, topic: 'Rentabilitet', question: 'Hvad viser afkastningsgraden?', options: ['Forrentningen af virksomhedens samlede aktiver (uanset finansiering)', 'Selskabsskatten', 'Lønudviklingen', 'Markedsandelen'], correct: 0 },
+  { id: 63, topic: 'Rentabilitet', question: 'Hvad er egenkapitalens forrentning (EKF)?', options: ['Hvor stor en forrentning ejerne får af deres indskudte kapital', 'Renten på et banklån', 'Skatten af egenkapitalen', 'Aktiver pr. ejer'], correct: 0 },
+  { id: 64, topic: 'Rentabilitet', question: 'Hvornår er det typisk fordelagtigt at lånefinansiere (positiv gearing)?', options: ['Når afkastningsgraden er højere end gældsrenten', 'Når gældsrenten er højere end afkastningsgraden', 'Aldrig', 'Altid'], correct: 0 },
+  { id: 65, topic: 'Rentabilitet', question: 'Hvad er rentemarginalen?', options: ['Forskellen mellem afkastningsgrad og gældsrente — viser om gearing øger EKF', 'Renten man får i banken', 'En type skat', 'Forskellen mellem aktiver og passiver'], correct: 0 },
+
+  // === Kapitel 16: Soliditet og likviditet ===
+  { id: 66, topic: 'Soliditet og likviditet', question: 'Hvad er formlen for soliditetsgraden?', options: ['(Egenkapital / Aktiver i alt) × 100', '(Omsætning / Aktiver) × 100', '(Resultat / Egenkapital) × 100', '(Omsætningsaktiver / Kortfristet gæld) × 100'], correct: 0 },
+  { id: 67, topic: 'Soliditet og likviditet', question: 'Hvad viser soliditetsgraden?', options: ['Hvor stor en andel af aktiverne der er finansieret af egenkapital', 'Antallet af kunder', 'Hvor stor en andel af omsætningen der er overskud', 'Skatteprocenten'], correct: 0 },
+  { id: 68, topic: 'Soliditet og likviditet', question: 'Hvad er formlen for likviditetsgraden (current ratio)?', options: ['(Omsætningsaktiver / Kortfristet gæld) × 100', '(Egenkapital / Aktiver) × 100', '(Resultat / Omsætning) × 100', 'Aktiver / Passiver'], correct: 0 },
+  { id: 69, topic: 'Soliditet og likviditet', question: 'Hvad viser likviditetsgraden?', options: ['Virksomhedens evne til at betale sine kortfristede gældsforpligtelser', 'Indtjeningsevnen', 'Salgsprisen pr. enhed', 'Antallet af varer på lager'], correct: 0 },
+  { id: 70, topic: 'Soliditet og likviditet', question: 'Hvad sker der typisk med risikoen, når soliditetsgraden er lav?', options: ['Risikoen for kreditorerne stiger', 'Risikoen er nul', 'Skatten falder', 'Likviditeten stiger automatisk'], correct: 0 },
+
+  // === Kapitel 17: CSR ===
+  { id: 71, topic: 'CSR', question: 'Hvad står CSR for?', options: ['Customer Service Rating', 'Corporate Social Responsibility', 'Capital Stock Return', 'Cost Saving Revenue'], correct: 1 },
+  { id: 72, topic: 'CSR', question: 'Hvad er den tredelte bundlinje (Triple Bottom Line)?', options: ['Tre forskellige skatter', 'Økonomi, sociale forhold og miljø', 'Tre regnskabsklasser', 'Tre ejerformer'], correct: 1 },
+  { id: 73, topic: 'CSR', question: 'Hvad er greenwashing?', options: ['Rengøring med grønne midler', 'Når en virksomhed fremstår mere bæredygtig end den reelt er', 'En type CSR-rapportering', 'En miljølov'], correct: 1 },
+  { id: 74, topic: 'CSR', question: 'Hvilke trin er i Carrolls CSR-pyramide?', options: ['Økonomisk, juridisk, etisk og filantropisk ansvar', 'Marketing, salg, produktion og indkøb', 'Profit, vækst, magt og fred', 'Drift, finans, HR og IT'], correct: 0 },
+  { id: 75, topic: 'CSR', question: 'Hvad er FN\'s verdensmål (SDG)?', options: ['17 mål for bæredygtig udvikling vedtaget af FN', '5 økonomiske mål for industrilande', 'En lov', 'En type aktie'], correct: 0 },
+
+  // === Kapitel 18: CSR-rapportering ===
+  { id: 76, topic: 'CSR-rapportering', question: 'Hvilken lov pålægger større virksomheder at rapportere om CSR?', options: ['Aftaleloven', 'Årsregnskabsloven (§99a/§99b)', 'Selskabsloven', 'Skatteloven'], correct: 1 },
+  { id: 77, topic: 'CSR-rapportering', question: 'Hvad er en Code of Conduct?', options: ['Et internt regelsæt der beskriver, hvordan medarbejdere og leverandører skal opføre sig', 'En revisorrapport', 'En straffelov', 'Et budget'], correct: 0 },
+  { id: 78, topic: 'CSR-rapportering', question: 'Hvad er GRI-standarden?', options: ['En international standard for bæredygtighedsrapportering (Global Reporting Initiative)', 'En type aktie', 'En type pant', 'En skatteklasse'], correct: 0 },
+  { id: 79, topic: 'CSR-rapportering', question: 'Hvad er typisk indhold i en CSR-rapport?', options: ['Mål, politikker, handlinger og resultater inden for samfundsansvar', 'Kun lønudgifter', 'Kun aktiekurser', 'Kun budgettet for året'], correct: 0 },
+
+  // === Kapitel 19: Strategiens kendetegn ===
+  { id: 80, topic: 'Strategi', question: 'Hvad er en strategi?', options: ['En kortsigtet aktionsplan for en uge', 'En langsigtet plan der skal sikre virksomhedens mål og konkurrencekraft', 'En type regnskab', 'En juridisk kontrakt'], correct: 1 },
+  { id: 81, topic: 'Strategi', question: 'Hvilke trin indgår typisk i den strategiske procesmodel?', options: ['Analyse → strategivalg → implementering', 'Indkøb → produktion → salg', 'Idé → patent → markedsføring', 'Bogføring → revision → udbetaling'], correct: 0 },
+  { id: 82, topic: 'Strategi', question: 'Hvad er forskellen på koncernstrategi og forretningsenhedsstrategi?', options: ['Koncernstrategi gælder hele koncernen; forretningsenhedsstrategi en enkelt forretningsenhed', 'De er det samme', 'Koncernstrategi gælder kun staten', 'Forretningsenhedsstrategi handler kun om HR'], correct: 0 },
+  { id: 83, topic: 'Strategi', question: 'Hvad er strategiens primære funktion?', options: ['At skabe konkurrencekraft og retning for virksomheden', 'At fastsætte lønninger', 'At fastsætte selskabsskatten', 'At regulere bogføring'], correct: 0 },
+
+  // === Kapitel 20: Ekstern strategisk analyse ===
+  { id: 84, topic: 'Ekstern strategisk analyse', question: 'Hvor mange kræfter findes der i Porters Five Forces?', options: ['3', '5', '7', '9'], correct: 1 },
+  { id: 85, topic: 'Ekstern strategisk analyse', question: 'Hvilken af følgende er IKKE en del af Porters Five Forces?', options: ['Truslen fra nye udbydere', 'Leverandørernes forhandlingsstyrke', 'Medarbejdernes motivation', 'Truslen fra substituerende produkter'], correct: 2 },
+  { id: 86, topic: 'Ekstern strategisk analyse', question: 'Hvad analyserer PESTEL-modellen?', options: ['Interne forhold', 'Eksterne makroforhold (politiske, økonomiske, sociale, teknologiske, miljømæssige og lovgivningsmæssige)', 'Konkurrenter', 'Medarbejdere'], correct: 1 },
+  { id: 87, topic: 'Ekstern strategisk analyse', question: 'Hvad er konjunkturer?', options: ['Bølgebevægelser i samfundsøkonomien (op- og nedgangstider)', 'En aktiekurs', 'En lov', 'Et nøgletal'], correct: 0 },
+  { id: 88, topic: 'Ekstern strategisk analyse', question: 'Hvad menes med truslen fra substituerende produkter?', options: ['Risikoen for at kunder vælger erstatningsprodukter der dækker samme behov', 'Risikoen for konkurs', 'At medarbejdere skifter job', 'At leverandøren hæver prisen'], correct: 0 },
+
+  // === Kapitel 21: Intern strategisk analyse ===
+  { id: 89, topic: 'Intern strategisk analyse', question: 'Hvilke to typer aktiviteter findes i Porters værdikæde?', options: ['Hurtige og langsomme', 'Primære aktiviteter og støtteaktiviteter', 'Interne og eksterne', 'Faste og variable'], correct: 1 },
+  { id: 90, topic: 'Intern strategisk analyse', question: 'Hvad er en kernekompetence?', options: ['En unik kompetence der giver virksomheden konkurrencefordel', 'En generel kompetence enhver har', 'Antallet af ansatte', 'Selskabskapitalen'], correct: 0 },
+  { id: 91, topic: 'Intern strategisk analyse', question: 'Hvilke er Porters generiske strategier?', options: ['Vækst, vedligehold og lukning', 'Omkostningsleder, differentiering og fokus', 'B2B, B2C og B2G', 'Penetration, udvikling og diversifikation'], correct: 1 },
+  { id: 92, topic: 'Intern strategisk analyse', question: 'Hvilke strategier indgår i Ansoffs vækstmatrice?', options: ['Markedspenetration, markedsudvikling, produktudvikling og diversifikation', 'Vækst, fusion, opkøb og likvidation', 'Differentiering, fokus og omkostningsleder', 'SWOT, PESTEL og BMC'], correct: 0 },
+  { id: 93, topic: 'Intern strategisk analyse', question: 'Hvilken vækststrategi handler om at sælge eksisterende produkter på et nyt marked?', options: ['Markedsudvikling', 'Produktudvikling', 'Diversifikation', 'Markedspenetration'], correct: 0 },
+
+  // === Kapitel 22: Den strategiske plan ===
+  { id: 94, topic: 'Strategisk plan', question: 'Hvad er en strategisk plan?', options: ['Den samlede plan der beskriver mål, vækststrategi, konkurrencestrategi og handlingsplaner', 'Et budget', 'En vedtægt', 'En kontrakt'], correct: 0 },
+  { id: 95, topic: 'Strategisk plan', question: 'Hvad er traditionel (rationel) strategisk tænkning?', options: ['Man analyserer, vælger og implementerer strategien systematisk og top-down', 'Man bruger udelukkende intuition', 'Man planlægger ikke', 'Medarbejderne bestemmer alt'], correct: 0 },
+  { id: 96, topic: 'Strategisk plan', question: 'Hvad er proaktiv (kreativ) strategisk tænkning?', options: ['Man bruger kreativitet, eksperimenter og afprøver ideer for at skabe nye muligheder', 'Man kopierer konkurrenterne', 'Man ignorerer markedet', 'Man reagerer altid for sent'], correct: 0 },
+  { id: 97, topic: 'Strategisk plan', question: 'Hvad bruges SWOT-opsamlingen til i en strategisk plan?', options: ['Som strategisk platform der samler styrker, svagheder, muligheder og trusler', 'Som en regnskabsopstilling', 'Som et lønsystem', 'Som en indkøbsliste'], correct: 0 }
+];
+
+const SUBJECTS = [
+  {
+    id: 'informatik-b',
+    code: 'IT.B.01',
+    title: 'Informatik B',
+    tagline: 'Digitale systemer · Netværk · Databaser · Algoritmer · Sikkerhed',
+    description: 'En blød introduktion til centrale begreber inden for informatik på gymnasieniveau.',
+    topics: [
+      'Digitale systemer', 'Netværk og internet', 'Databaser', 'Programmering',
+      'Algoritmer og datastrukturer', 'Sikkerhed og kryptografi', 'Operativsystemer', 'IT og samfund'
+    ],
+    questions: QUESTIONS_INFORMATIK_B.map(q => ({ ...q, subject: 'Informatik B' })),
+    accent: 'pink',
+    available: true
+  },
+  {
+    id: 'afsaetning-a',
+    code: 'AF.A.01',
+    title: 'Afsætning A',
+    tagline: 'Markedsanalyse · Strategi · Segmentering · Internationalisering',
+    description: 'Bygget på "Marketing – en grundbog i afsætning". Dækker hele kerneindholdet på A-niveau.',
+    topics: [
+      'Markedsanalyse og dataindsamling', 'Den interne situation', 'Den eksterne situation',
+      'Segmentering og målgrupper', 'Marketingmix', 'Strategi', 'Internationalisering', 'Bæredygtighed og samfundsansvar'
+    ],
+    questions: QUESTIONS_AFSAETNING_A.map(q => ({ ...q, subject: 'Afsætning A' })),
+    accent: 'blue',
+    available: true
+  },
+  {
+    id: 'erhvervsjura-c',
+    code: 'EJ.C.01',
+    title: 'Erhvervsjura C',
+    tagline: 'Aftaleret · Erstatningsret · Forbrugerret · Kreditret',
+    description: 'Bygget på "Erhvervsjura C & B – juraens grundregler" (Systime). Dækker alle 24 kapitler.',
+    topics: [
+      'Demokrati & menneskerettigheder', 'Digital dannelse', 'Retskilder & juridisk metode',
+      'Det danske retssystem', 'Erstatningsret', 'Forsikringsret', 'Aftaleret & fuldmagt',
+      'Aftalers ugyldighed', 'Forbrugerret', 'Markedsføringsret', 'Handelskøb',
+      'Kreditret & tinglysning', 'Hæftelse & inkasso'
+    ],
+    questions: QUESTIONS_ERHVERVSJURA_C.map(q => ({ ...q, subject: 'Erhvervsjura C' })),
+    accent: 'gold',
+    available: true
+  },
+  {
+    id: 'virksomhedsoekonomi-b',
+    code: 'VØ.B.01',
+    title: 'Virksomhedsøkonomi B',
+    tagline: 'Indtjening · Regnskab · Nøgletal · Strategi',
+    description: 'Bygget på "Virksomhedsøkonomi B til EUX". Dækker alle 22 kapitler — fra forretningsidé til strategisk plan.',
+    topics: [
+      'Opstart & ejerformer', 'Indtjening & kalkulation', 'Forretningsplan',
+      'Interessenter & vækst', 'Årsregnskab & rapport', 'Regnskabsanalyse',
+      'Rentabilitet & likviditet', 'CSR & bæredygtighed', 'Strategisk analyse', 'Strategisk plan'
+    ],
+    questions: QUESTIONS_VIRKSOMHEDSOEKONOMI_B.map(q => ({ ...q, subject: 'Virksomhedsøkonomi B' })),
+    accent: 'green',
+    available: true
+  }
+];
+
+/* Utilities */
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function shuffleOptions(q) {
+  const correctText = q.options[q.correct];
+  const newOptions = shuffle(q.options);
+  return { ...q, options: newOptions, correct: newOptions.indexOf(correctText) };
+}
+function buildSession(questions, limit) {
+  const shuffled = shuffle(questions).map(shuffleOptions);
+  if (typeof limit === 'number' && limit > 0 && limit < shuffled.length) {
+    return shuffled.slice(0, limit);
+  }
+  return shuffled;
+}
+
+/* Personlig rekord pr. fag — gemmes lokalt i browseren. */
+function loadBest(subjectId) {
+  try {
+    const raw = localStorage.getItem(`quiz-best-${subjectId}`);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+function saveBest(subjectId, result) {
+  try { localStorage.setItem(`quiz-best-${subjectId}`, JSON.stringify(result)); } catch {}
+}
+function isBetterThan(now, prev) {
+  if (!prev) return true;
+  if (now.pct !== prev.pct) return now.pct > prev.pct;
+  return now.score > prev.score;
+}
+
+/* Livstidsstatistik — samlet score på tværs af alle fag og sessioner. */
+const EMPTY_STATS = { score: 0, played: 0, correct: 0, wrong: 0 };
+function loadStats() {
+  try {
+    const raw = localStorage.getItem('quiz-lifetime-stats');
+    return raw ? { ...EMPTY_STATS, ...JSON.parse(raw) } : { ...EMPTY_STATS };
+  } catch { return { ...EMPTY_STATS }; }
+}
+function addStats({ score, correct, wrong }) {
+  const s = loadStats();
+  s.score   += score;
+  s.played  += 1;
+  s.correct += correct;
+  s.wrong   += wrong;
+  try { localStorage.setItem('quiz-lifetime-stats', JSON.stringify(s)); } catch {}
+  return s;
+}
+
+/* =========================================================
+   ROOT
+   ========================================================= */
+function App() {
+  const [screen, setScreen] = useState('select'); // select | quiz | result | stats
+  const [subject, setSubject] = useState(null);
+  const [questions, setQuestions] = useState([]);
+  const [qIndex, setQIndex] = useState(0);
+  const [score, setScore] = useState(0);
+  const [history, setHistory] = useState([]);
+  const goToStats = () => setScreen('stats');
+
+  const startQuiz = (s, limit) => {
+    if (!s.available) return;
+    setSubject(s);
+    setQuestions(buildSession(s.questions, limit));
+    setQIndex(0);
+    setScore(0);
+    setHistory([]);
+    setScreen('quiz');
+  };
+
+  const onAnswer = ({ correct, topic, delta }) => {
+    setScore(prev => Math.max(0, prev + delta));
+    setHistory(h => [...h, { correct, topic }]);
+  };
+
+  const onNext = () => {
+    if (qIndex + 1 >= questions.length) setScreen('result');
+    else setQIndex(i => i + 1);
+  };
+
+  const playAgain = () => {
+    setScreen('select');
+    setSubject(null);
+    setQuestions([]);
+    setQIndex(0);
+    setScore(0);
+    setHistory([]);
+  };
+
+  // Bekræft før man forlader en igangværende quiz — ellers ryger fremskridtet.
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
+  const handleHome = () => {
+    if (screen === 'quiz') {
+      setShowExitConfirm(true);
+      return;
+    }
+    playAgain();
+  };
+  const confirmExit = () => { setShowExitConfirm(false); playAgain(); };
+  const cancelExit  = () => setShowExitConfirm(false);
+
+  // Apply the current subject's theme class to <body> so the
+  // CSS variables cascade to the whole document (incl. body bg).
+  // Forsiden bruger det blå tema som standard.
+  useEffect(() => {
+    const cls = subject ? `theme-${subject.accent}` : 'theme-blue';
+    document.body.classList.add(cls);
+    return () => document.body.classList.remove(cls);
+  }, [subject]);
+
+  // Dynamisk page title — viser hvor man er i fanen.
+  useEffect(() => {
+    const base = 'Quiz · Skoleøvelse';
+    if (screen === 'quiz' && subject && questions.length > 0) {
+      document.title = `${subject.title} · ${qIndex + 1}/${questions.length} · Quiz`;
+    } else if (screen === 'result' && subject) {
+      document.title = `Resultat · ${subject.title}`;
+    } else {
+      document.title = base;
+    }
+  }, [screen, subject, qIndex, questions.length]);
+
+  return (
+    <div className="min-h-screen relative">
+      <TopChrome screen={screen} subject={subject} qIndex={qIndex} total={questions.length} score={score} onHome={handleHome} />
+      <main className="px-5 sm:px-10 lg:px-14 pt-28 pb-20 max-w-[1240px] mx-auto">
+        {screen === 'select' && <SelectScreen subjects={SUBJECTS} onSelect={startQuiz} onShowStats={goToStats} />}
+        {screen === 'quiz' && (
+          <QuizScreen
+            subject={subject}
+            questions={questions}
+            qIndex={qIndex}
+            score={score}
+            onAnswer={onAnswer}
+            onNext={onNext}
+          />
+        )}
+        {screen === 'result' && (
+          <ResultScreen subject={subject} score={score} history={history} onPlayAgain={playAgain} />
+        )}
+        {screen === 'stats' && (
+          <StatsScreen subjects={SUBJECTS} onBack={playAgain} />
+        )}
+      </main>
+      <BottomChrome screen={screen} />
+      {showExitConfirm && <ExitConfirmModal onConfirm={confirmExit} onCancel={cancelExit} />}
+    </div>
+  );
+}
+
+/* =========================================================
+   TOP / BOTTOM CHROME
+   ========================================================= */
+function TopChrome({ screen, subject, qIndex, total, score, onHome }) {
+  const [time, setTime] = useState(() => fmtTime(new Date()));
+  useEffect(() => {
+    const id = setInterval(() => setTime(fmtTime(new Date())), 1000);
+    return () => clearInterval(id);
+  }, []);
+  return (
+    <header className="fixed top-0 left-0 right-0 z-40 border-b border-iron/40 bg-ink/70 backdrop-blur-xl">
+      <div className="max-w-[1240px] mx-auto px-5 sm:px-10 lg:px-14 h-16 flex items-center justify-between">
+        <button
+          onClick={onHome}
+          aria-label="Tilbage til startsiden"
+          className="group flex items-center gap-3.5 hover:opacity-80 transition-opacity"
+        >
+          <span className="relative w-2 h-2 rounded-full bg-rose pulse-dot" />
+          <span className="font-serif text-lg italic text-bone group-hover:text-rose transition-colors">Quiz</span>
+          <span className="hidden sm:inline w-px h-4 bg-iron/60" />
+          <span className="hidden sm:inline font-mono text-[10px] meta text-mist">Skolemodul</span>
+        </button>
+        <div className="hidden md:flex items-center gap-6 font-mono text-[10px] meta text-mist tnum">
+          {screen === 'quiz' && subject && (
+            <>
+              <span>{subject.code}</span>
+              <span className="text-iron">·</span>
+              <span>{String(qIndex + 1).padStart(2,'0')} / {String(total).padStart(2,'0')}</span>
+              <span className="text-iron">·</span>
+              <span>Score <span className="text-rose ml-1">{String(score).padStart(3,'0')}</span></span>
+            </>
+          )}
+          {screen !== 'quiz' && <span>{time}</span>}
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function BottomChrome({ screen }) {
+  const labels = { select: 'vælg modul', quiz: 'aktiv quiz', result: 'session afsluttet', stats: 'min statistik' };
+  return (
+    <footer className="fixed bottom-0 left-0 right-0 z-40 border-t border-iron/40 bg-ink/70 backdrop-blur-xl">
+      <div className="max-w-[1240px] mx-auto px-5 sm:px-10 lg:px-14 h-11 flex items-center justify-between font-mono text-[10px] meta text-mist">
+        <span className="flex items-center gap-2">
+          <span className="text-rose">●</span>
+          <span>{labels[screen]}</span>
+        </span>
+        <span className="hidden sm:inline-flex items-baseline gap-2">
+          <span>skabt af</span>
+          <span className="font-serif italic normal-case tracking-normal text-bone text-[13px] leading-none">Bertram Hummel</span>
+        </span>
+        <span className="text-mist/70 hidden md:inline">Tast 1–4 for at svare</span>
+      </div>
+    </footer>
+  );
+}
+
+function fmtTime(d) {
+  const p = n => String(n).padStart(2, '0');
+  return `${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+/* =========================================================
+   EXIT CONFIRM MODAL — bekræftelse før man forlader en quiz
+   ========================================================= */
+function ExitConfirmModal({ onConfirm, onCancel }) {
+  // Escape-tast lukker modalen (= bliv i quizzen)
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onCancel(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onCancel]);
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center px-5 bg-ink/85 backdrop-blur-sm fade-in"
+      onClick={onCancel}
+      role="dialog"
+      aria-modal="true"
+    >
+      <div
+        className="relative max-w-md w-full border border-iron/60 bg-shade rounded-xl p-8 sm:p-10 ring-soft slide-up shadow-accent-soft"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="font-mono text-[10px] meta text-rose mb-4 flex items-center gap-3">
+          <span className="inline-block w-6 h-px bg-rose/60" />
+          <span>bekræftelse</span>
+        </div>
+        <h2 className="font-serif font-light text-4xl text-chalk mb-3 leading-tight tracking-tight">
+          Forlad <span className="italic text-rose">quizzen?</span>
+        </h2>
+        <p className="text-fog text-[15px] leading-relaxed mb-8">
+          Du er midt i en quiz. Hvis du forlader den nu, mister du din nuværende score og fremskridt.
+        </p>
+        <div className="flex flex-col-reverse sm:flex-row gap-3">
+          <button
+            onClick={onConfirm}
+            className="flex-1 font-mono text-xs meta px-5 py-3.5 rounded-md border border-berry/50 bg-berry/10 hover:bg-berry/20 hover:border-berry text-berry transition-all duration-300"
+          >
+            ja, forlad quizzen
+          </button>
+          <button
+            onClick={onCancel}
+            autoFocus
+            className="flex-1 font-mono text-xs meta px-5 py-3.5 rounded-md bg-rose text-ink hover:bg-bone transition-all duration-300"
+          >
+            nej, bliv i quizzen
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* =========================================================
+   SELECT SCREEN
+   ========================================================= */
+function SelectScreen({ subjects, onSelect, onShowStats }) {
+  const available = subjects.filter(s => s.available);
+  const stats = loadStats();
+
+  return (
+    <div className="slide-up">
+      {/* Hero */}
+      <div className="pt-4 pb-14 relative">
+        {/* Varme dekorative glød — peach/amber bag heroen */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-32 -right-24 w-[640px] h-[640px] opacity-95"
+          style={{ background: 'radial-gradient(circle, rgba(255,199,148,0.20) 0%, rgba(255,141,179,0.07) 42%, transparent 68%)' }}
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute top-40 -left-24 w-[420px] h-[420px] opacity-80"
+          style={{ background: 'radial-gradient(circle, rgba(255,141,179,0.13) 0%, transparent 70%)' }}
+        />
+
+        {/* Eyebrow + JBAI signatur */}
+        <div className="relative flex items-center justify-between gap-6 mb-10 flex-wrap">
+          <div className="font-mono text-[11px] meta text-rose flex items-center gap-3">
+            <span className="inline-block w-6 h-px bg-rose/60" />
+            <span>en quiz om alt det, du burde vide</span>
+          </div>
+          <span className="font-serif italic text-peach glow-peach text-2xl tracking-wide leading-none">JBAI</span>
+        </div>
+
+        <h1 className="relative font-serif font-light text-[64px] sm:text-[88px] lg:text-[124px] leading-[0.92] tracking-[-0.02em] text-chalk">
+          Lær det,<br/>
+          <span className="italic text-bone">test det,</span>{' '}
+          <span className="italic text-rose glow-rose">husk det.</span>
+        </h1>
+
+        <div className="relative mt-12 max-w-2xl">
+          <div className="border-l-2 border-peach/35 pl-6 py-1">
+            <div className="font-mono text-[10px] meta text-peach mb-3">princip</div>
+            <p className="text-bone/90 text-base sm:text-[17px] leading-relaxed">
+              Vælg et fagligt modul. Du får ét spørgsmål ad gangen.
+              Korrekt svar giver <span className="text-rose font-medium">+10 point</span>,
+              forkert svar koster <span className="text-berry font-medium">−5 point</span>.
+              Score kan ikke gå under nul.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Adgang til Statistik-siden — som en bred knap */}
+      <button
+        onClick={onShowStats}
+        className="group w-full text-left mb-14 border-y border-iron/40 py-8 sm:py-10 relative hover:border-rose/40 hover:bg-shade/30 transition-all duration-300"
+      >
+        <div className="flex items-end justify-between gap-8 flex-wrap">
+          <div>
+            <div className="font-mono text-[10px] meta text-mist mb-3">din samlede score</div>
+            <div className="font-serif font-light text-[64px] sm:text-[88px] leading-[0.85] text-rose glow-rose tnum tracking-[-0.02em]">
+              {stats.score.toLocaleString('da-DK')}
+            </div>
+            <div className="font-mono text-[10px] meta text-rose mt-3 inline-flex items-center gap-2">
+              <span>se mine rekorder pr. fag</span>
+              <span className="transform group-hover:translate-x-1 transition-transform duration-300">→</span>
+            </div>
+          </div>
+          {stats.played > 0 && (
+            <div className="flex gap-10 sm:gap-14 pb-3">
+              <div>
+                <div className="font-mono text-[10px] meta text-mist mb-2">quizzer</div>
+                <div className="font-serif font-light text-4xl text-bone tnum">{stats.played}</div>
+              </div>
+              <div>
+                <div className="font-mono text-[10px] meta text-mist mb-2">korrekte</div>
+                <div className="font-serif font-light text-4xl text-rose tnum">{stats.correct}</div>
+              </div>
+              <div>
+                <div className="font-mono text-[10px] meta text-mist mb-2">forkerte</div>
+                <div className="font-serif font-light text-4xl text-berry tnum">{stats.wrong}</div>
+              </div>
+            </div>
+          )}
+        </div>
+      </button>
+
+      {/* Modules */}
+      <div className="mt-2">
+        <div className="flex items-end justify-between mb-6">
+          <h2 className="font-mono text-[10px] meta text-mist">Vælg modul</h2>
+          <span className="font-mono text-[10px] meta text-iron tnum">
+            {String(available.length).padStart(2,'0')} tilgængelige
+          </span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {available.map((s, i) => (
+            <SubjectCard key={s.id} subject={s} index={i} onSelect={onSelect} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SubjectCard({ subject, index, onSelect }) {
+  const { code, title, tagline, description, topics, questions, accent } = subject;
+  const best = loadBest(subject.id);
+  const counts = [10, 25, 50].filter(c => c < questions.length);
+  return (
+    <div
+      className={`theme-${accent} card-soft slide-up group flex flex-col h-full text-left border border-iron/60 hover:border-rose/60 bg-shade/40 hover:bg-shade/70 ring-soft backdrop-blur-sm rounded-xl p-8 sm:p-10 relative overflow-hidden`}
+      style={{ animationDelay: `${(index + 1) * 120}ms` }}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between mb-10">
+        <span className="font-mono text-[10px] meta text-mist">{code}</span>
+        <span className="inline-flex items-center gap-2 font-mono text-[10px] meta px-3 py-1.5 rounded-full border border-rose/40 text-rose bg-rose/5">
+          <span className="w-1.5 h-1.5 rounded-full bg-rose pulse-dot" />
+          åben
+        </span>
+      </div>
+
+      {/* Title block */}
+      <h3 className="font-serif font-light text-[44px] sm:text-[56px] lg:text-[64px] leading-[0.95] tracking-[-0.02em] mb-3 text-chalk group-hover:text-rose transition-colors duration-500">
+        {title}
+      </h3>
+      <p className="font-serif italic text-lg sm:text-xl text-fog mb-4">{tagline}</p>
+      <p className="text-mist text-[14px] leading-relaxed max-w-md mb-8">{description}</p>
+
+      {/* Stats */}
+      <div className="grid grid-cols-4 gap-x-3 gap-y-3 mb-7 pb-7 border-b border-iron/40">
+        <Stat label="emner" value={String(topics.length).padStart(2,'0')} />
+        <Stat label="spørgsmål" value={String(questions.length)} />
+        <Stat label="tid" value={`~${Math.ceil(questions.length * 0.4)}m`} />
+        <Stat label="niveau" value="begynder" />
+      </div>
+
+      {/* Topic chips */}
+      <div className="mb-9 flex-1">
+        <div className="font-mono text-[10px] meta text-mist mb-3">// dækker</div>
+        <div className="flex flex-wrap gap-1.5">
+          {topics.map(t => (
+            <span key={t} className="font-mono text-[10.5px] px-2.5 py-1 rounded-md border border-iron/60 text-fog group-hover:border-rose/30 group-hover:text-bone transition-all duration-500">
+              {t}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Personlig rekord */}
+      {best && (
+        <div className="mt-auto mb-4 font-mono text-[10px] meta text-mist flex items-center gap-2 flex-wrap">
+          <span className="text-rose">★</span>
+          <span>bedste:</span>
+          <span className="text-rose tnum">{best.score}</span>
+          <span className="text-iron">·</span>
+          <span className="text-rose">{best.pct}%</span>
+        </div>
+      )}
+
+      {/* Antal-vælger / start */}
+      <div className={best ? '' : 'mt-auto'}>
+        <div className="font-mono text-[10px] meta text-mist mb-3">// start med</div>
+        <div className="flex flex-wrap gap-2">
+          {counts.map(c => (
+            <button
+              key={c}
+              onClick={() => onSelect(subject, c)}
+              className="font-mono text-xs px-4 py-2.5 rounded-md border border-iron/60 hover:border-rose/60 hover:bg-rose/5 hover:text-rose text-fog transition-all duration-300 tnum"
+            >
+              {c} spm
+            </button>
+          ))}
+          <button
+            onClick={() => onSelect(subject)}
+            className="font-mono text-xs px-4 py-2.5 rounded-md border border-rose/60 bg-rose/10 hover:bg-rose/20 text-rose transition-all duration-300 inline-flex items-center gap-2"
+          >
+            <span>alle ({questions.length})</span>
+            <span className="transform group-hover:translate-x-0.5 transition-transform">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Stat({ label, value }) {
+  return (
+    <div>
+      <div className="font-mono text-[10px] meta text-mist mb-1">{label}</div>
+      <div className="font-serif text-2xl text-chalk tnum">{value}</div>
+    </div>
+  );
+}
+
+/* =========================================================
+   QUIZ SCREEN
+   ========================================================= */
+function QuizScreen({ subject, questions, qIndex, score, onAnswer, onNext }) {
+  const q = questions[qIndex];
+  const [selected, setSelected] = useState(null);
+  const [revealed, setRevealed] = useState(false);
+  const [scorePops, setScorePops] = useState([]);
+  const [scoreKey, setScoreKey] = useState(0);
+  const advanceTimer = useRef(null);
+
+  useEffect(() => {
+    setSelected(null);
+    setRevealed(false);
+  }, [qIndex]);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (revealed) return;
+      const idx = ['1','2','3','4'].indexOf(e.key);
+      if (idx >= 0 && idx < q.options.length) handleSelect(idx);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  });
+
+  useEffect(() => () => clearTimeout(advanceTimer.current), []);
+
+  const handleSelect = (idx) => {
+    if (revealed) return;
+    const correct = idx === q.correct;
+    const delta = correct ? +10 : -5;
+
+    setSelected(idx);
+    setRevealed(true);
+    onAnswer({ correct, topic: q.topic, delta });
+    setScoreKey(k => k + 1);
+
+    const popId = Date.now();
+    setScorePops(arr => [...arr, { id: popId, delta }]);
+    setTimeout(() => setScorePops(arr => arr.filter(p => p.id !== popId)), 1200);
+
+    clearTimeout(advanceTimer.current);
+    advanceTimer.current = setTimeout(() => onNext(), correct ? 950 : 1750);
+  };
+
+  const progress = (qIndex / questions.length) * 100;
+  const progressNext = ((qIndex + 1) / questions.length) * 100;
+  const visibleProgress = revealed ? progressNext : progress;
+
+  return (
+    <div className="pt-2">
+      {/* Top bar: progress + status */}
+      <div className="mb-12 sm:mb-16">
+        <div className="flex items-end justify-between mb-4 gap-6">
+          <div className="flex items-center gap-3 sm:gap-4 font-mono text-[10px] meta">
+            <span className="text-rose">{subject.code}</span>
+            <span className="w-1 h-1 rounded-full bg-iron" />
+            <span className="text-mist">spørgsmål</span>
+            <span className="font-serif text-[18px] sm:text-[22px] text-chalk tnum tracking-tight">
+              {String(qIndex + 1).padStart(2,'0')}
+              <span className="text-iron mx-1.5">/</span>
+              <span className="text-mist">{String(questions.length).padStart(2,'0')}</span>
+            </span>
+          </div>
+
+          <ScoreReadout score={score} pops={scorePops} bumpKey={scoreKey} />
+        </div>
+
+        {/* Progress */}
+        <div className="relative h-[5px] bg-ash rounded-full overflow-hidden">
+          <div
+            className="absolute inset-y-0 left-0 bg-gradient-to-r from-coral via-rose to-hot rounded-full progress-fill shadow-accent-bar"
+            style={{ width: `${visibleProgress}%` }}
+          />
+          <div
+            className="absolute top-1/2 w-2.5 h-2.5 -mt-[5px] rounded-full bg-rose progress-fill shadow-accent-dot"
+            style={{ left: `calc(${visibleProgress}% - 5px)` }}
+          />
+        </div>
+      </div>
+
+      {/* Question + answers */}
+      <div key={qIndex} className="slide-left">
+        <div className="mb-10 flex items-center gap-3 flex-wrap">
+          <span className="font-mono text-[10px] meta text-mist">Emne</span>
+          <span className="inline-flex items-center gap-2 font-mono text-[11px] text-rose px-3 py-1.5 rounded-full border border-rose/25 bg-rose/[0.07]">
+            <span className="w-1 h-1 rounded-full bg-rose" />
+            {q.topic}
+          </span>
+        </div>
+
+        <div className="mb-14 max-w-4xl">
+          <h2 className="font-serif font-light text-[32px] sm:text-[44px] lg:text-[56px] leading-[1.08] tracking-[-0.015em] text-chalk">
+            {q.question}
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 max-w-5xl">
+          {q.options.map((opt, idx) => (
+            <Option
+              key={idx}
+              idx={idx}
+              text={opt}
+              isSelected={selected === idx}
+              isCorrect={idx === q.correct}
+              revealed={revealed}
+              onClick={() => handleSelect(idx)}
+            />
+          ))}
+        </div>
+
+        <div className="mt-10 min-h-[28px] font-mono text-xs meta">
+          {revealed && (
+            <div className="fade-in flex items-center gap-3">
+              {selected === q.correct ? (
+                <>
+                  <span className="text-rose">●</span>
+                  <span className="text-rose">korrekt</span>
+                  <span className="text-iron">·</span>
+                  <span className="text-mist">+10 point</span>
+                </>
+              ) : (
+                <>
+                  <span className="text-berry">●</span>
+                  <span className="text-berry">forkert</span>
+                  <span className="text-iron">·</span>
+                  <span className="text-mist">−5 point · korrekt svar markeret</span>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const LETTERS = ['A', 'B', 'C', 'D'];
+
+function Option({ idx, text, isSelected, isCorrect, revealed, onClick }) {
+  let state = 'idle';
+  if (revealed) {
+    if (isCorrect) state = 'correct';
+    else if (isSelected && !isCorrect) state = 'wrong';
+    else state = 'dim';
+  }
+
+  const containerCls = {
+    idle:    'opt-idle border-iron/60 bg-shade/40 text-chalk',
+    correct: 'border-rose/80 bg-rose/[0.1] text-chalk cursor-default',
+    wrong:   'border-berry/70 bg-berry/[0.1] text-chalk cursor-default',
+    dim:     'border-iron/30 bg-shade/20 text-mist/70 cursor-default'
+  }[state];
+
+  const badgeCls = {
+    idle:    'border-iron/70 text-mist bg-ink/40',
+    correct: 'border-transparent text-ink bg-rose',
+    wrong:   'border-transparent text-cream bg-berry',
+    dim:     'border-iron/40 text-mist/50 bg-ink/30'
+  }[state];
+
+  return (
+    <button
+      onClick={onClick}
+      disabled={revealed}
+      className={[
+        'opt group relative text-left border px-5 sm:px-6 py-4 sm:py-5 rounded-lg',
+        'flex items-center gap-4 sm:gap-5',
+        containerCls,
+        state === 'correct' ? 'shadow-accent-pop' : '',
+      ].join(' ')}
+    >
+      <span className={[
+        'letter-badge flex-shrink-0 w-10 h-10 rounded-md flex items-center justify-center',
+        'border font-mono text-[13px] font-semibold',
+        badgeCls
+      ].join(' ')}>
+        {state === 'correct' ? '✓' : state === 'wrong' ? '✕' : LETTERS[idx]}
+      </span>
+      <span className="font-sans text-[15px] sm:text-[17px] leading-snug flex-1">
+        {text}
+      </span>
+      {!revealed && (
+        <span className="arrow font-mono text-mist/40 opacity-0 transition-opacity duration-300 text-lg">→</span>
+      )}
+    </button>
+  );
+}
+
+function ScoreReadout({ score, pops, bumpKey }) {
+  return (
+    <div className="relative flex items-baseline gap-3 font-mono text-[10px] meta">
+      <span className="text-mist">Score</span>
+      <span
+        key={bumpKey}
+        className="score-bump font-serif text-[28px] sm:text-[34px] text-rose glow-rose tnum tracking-tight leading-none"
+      >
+        {String(score).padStart(3, '0')}
+      </span>
+      {pops.map(p => (
+        <span
+          key={p.id}
+          className={[
+            'score-pop absolute left-1/2 top-1 font-mono font-bold text-sm pointer-events-none',
+            p.delta > 0 ? 'text-rose glow-rose' : 'text-berry glow-berry'
+          ].join(' ')}
+        >
+          {p.delta > 0 ? `+${p.delta}` : p.delta}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+/* =========================================================
+   RESULT SCREEN
+   ========================================================= */
+function ResultScreen({ subject, score, history, onPlayAgain }) {
+  const total = history.length;
+  const correct = history.filter(h => h.correct).length;
+  const wrong   = total - correct;
+  const pct     = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+  // Personlig rekord: hent forrige, opdater hvis bedre.
+  const [prevBest, setPrevBest] = useState(null);
+  const [isNewRecord, setIsNewRecord] = useState(false);
+  useEffect(() => {
+    const existing = loadBest(subject.id);
+    setPrevBest(existing);
+    const now = { score, correct, total, pct, date: new Date().toISOString().slice(0, 10) };
+    if (isBetterThan(now, existing)) {
+      setIsNewRecord(true);
+      saveBest(subject.id, now);
+    }
+    // Læg sessionens resultat til den samlede livstidsstatistik.
+    addStats({ score, correct, wrong });
+  }, []);
+
+  const byTopic = useMemo(() => {
+    const map = {};
+    history.forEach(h => {
+      if (!map[h.topic]) map[h.topic] = { correct: 0, total: 0 };
+      map[h.topic].total += 1;
+      if (h.correct) map[h.topic].correct += 1;
+    });
+    return Object.entries(map)
+      .map(([topic, v]) => ({ topic, ...v, pct: Math.round((v.correct / v.total) * 100) }))
+      .sort((a, b) => b.pct - a.pct);
+  }, [history]);
+
+  const verdict =
+    pct >= 90 ? { headline: 'Helt i top.',       note: 'Du har styr på faget. Imponerende.' } :
+    pct >= 70 ? { headline: 'Pænt klaret.',      note: 'Solid præstation. Lidt finpudsning og du er der.' } :
+    pct >= 50 ? { headline: 'Du nåede igennem.', note: 'Grundlaget er der. Repetér de svage emner.' } :
+                { headline: 'Næsten der.',       note: 'Vend tilbage til pensum og prøv en gang til.' };
+
+  return (
+    <div className="slide-up max-w-6xl">
+      <div className="font-mono text-[11px] meta text-rose mb-6 flex items-center gap-3 flex-wrap">
+        <span className="inline-block w-6 h-px bg-rose/60" />
+        <span>session afsluttet</span>
+        {isNewRecord && (
+          <span className="ml-2 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-rose bg-rose/15 text-rose glow-rose">
+            <span className="text-base leading-none">★</span>
+            <span>ny personlig rekord</span>
+          </span>
+        )}
+      </div>
+
+      <h1 className="font-serif font-light text-[56px] sm:text-[88px] lg:text-[112px] leading-[0.92] tracking-[-0.02em] mb-3 text-chalk">
+        {verdict.headline}
+      </h1>
+      <p className="font-serif italic text-xl sm:text-2xl text-fog mb-16 max-w-2xl">
+        {verdict.note}
+      </p>
+
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr,1.15fr] gap-5 mb-6">
+        {/* Score block */}
+        <div className="border border-iron/50 bg-shade/40 ring-soft rounded-xl p-8 sm:p-12 relative overflow-hidden">
+          <div className="font-mono text-[10px] meta text-mist mb-5">Slutscore</div>
+          <div className="flex items-end gap-4">
+            <div className="font-serif font-light text-[140px] sm:text-[180px] leading-[0.85] text-rose glow-rose tnum tracking-[-0.04em]">
+              {score}
+            </div>
+            <div className="pb-6 font-mono text-xs text-mist">
+              <div>af</div>
+              <div className="text-chalk tnum">{total * 10}</div>
+              <div>mulige</div>
+            </div>
+          </div>
+
+          {prevBest && !isNewRecord && (
+            <div className="mt-6 font-mono text-[11px] meta text-mist flex items-center gap-2 flex-wrap">
+              <span>personlig rekord:</span>
+              <span className="text-rose tnum">{prevBest.score}</span>
+              <span className="text-iron">·</span>
+              <span className="text-rose">{prevBest.pct}%</span>
+            </div>
+          )}
+          {isNewRecord && prevBest && (
+            <div className="mt-6 font-mono text-[11px] meta text-mist flex items-center gap-2 flex-wrap">
+              <span>forrige rekord:</span>
+              <span className="text-fog tnum">{prevBest.score}</span>
+              <span className="text-iron">·</span>
+              <span className="text-fog">{prevBest.pct}%</span>
+            </div>
+          )}
+
+          <div className="mt-10 pt-8 border-t border-iron/40 grid grid-cols-3 gap-2">
+            <StatBlock label="korrekt" value={correct} accent="text-rose" />
+            <StatBlock label="forkert" value={wrong}   accent="text-berry" />
+            <StatBlock label="ratio"   value={`${pct}%`} accent="text-chalk" />
+          </div>
+        </div>
+
+        {/* Topic breakdown */}
+        <div className="border border-iron/50 bg-shade/40 ring-soft rounded-xl p-8 sm:p-12">
+          <div className="flex items-baseline justify-between mb-8">
+            <h3 className="font-serif italic text-2xl text-bone">Pr. emne</h3>
+            <span className="font-mono text-[10px] meta text-mist">{byTopic.length} emner</span>
+          </div>
+          <div className="space-y-5">
+            {byTopic.map((row, i) => (
+              <TopicRow key={row.topic} row={row} delay={i * 70} />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-12 flex flex-col sm:flex-row gap-5 items-stretch sm:items-center">
+        <button
+          onClick={onPlayAgain}
+          className="group relative overflow-hidden rounded-xl px-8 py-5 bg-rose text-ink hover:bg-bone transition-all duration-500 flex items-center gap-4 shadow-accent-soft"
+        >
+          <span className="font-mono text-[10px] meta tracking-[0.25em]">spil igen</span>
+          <span className="font-serif italic text-2xl">tag den om</span>
+          <span className="ml-2 transform group-hover:translate-x-1 transition-transform duration-300 text-lg">→</span>
+        </button>
+        <span className="font-mono text-[10px] meta text-mist sm:ml-3">
+          spørgsmål og svar blandes på ny
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function TopicRow({ row, delay }) {
+  const barTone = row.pct >= 70 ? 'bg-rose' : row.pct >= 40 ? 'bg-peach' : 'bg-berry';
+  const txtTone = row.pct >= 70 ? 'text-rose' : row.pct >= 40 ? 'text-peach' : 'text-berry';
+  return (
+    <div className="slide-left" style={{ animationDelay: `${delay}ms` }}>
+      <div className="flex items-baseline justify-between mb-2 gap-3">
+        <span className="font-serif italic text-[17px] text-chalk truncate">{row.topic}</span>
+        <span className="font-mono text-[11px] text-mist tnum whitespace-nowrap">
+          <span className="text-fog">{row.correct}/{row.total}</span>
+          <span className={`ml-3 ${txtTone}`}>{row.pct}%</span>
+        </span>
+      </div>
+      <div className="h-[3px] bg-ash rounded-full overflow-hidden">
+        <div className={`h-full ${barTone} progress-fill rounded-full`} style={{ width: `${row.pct}%` }} />
+      </div>
+    </div>
+  );
+}
+
+function StatBlock({ label, value, accent }) {
+  return (
+    <div>
+      <div className="font-mono text-[10px] meta text-mist mb-1">{label}</div>
+      <div className={`font-serif font-light text-4xl sm:text-5xl tnum ${accent}`}>{value}</div>
+    </div>
+  );
+}
+
+/* =========================================================
+   STATS SCREEN — Mine point pr. fag + samlet
+   ========================================================= */
+function StatsScreen({ subjects, onBack }) {
+  const [stats, setStats] = useState(() => loadStats());
+  const [bestBySubject, setBestBySubject] = useState(() =>
+    Object.fromEntries(subjects.map(s => [s.id, loadBest(s.id)]))
+  );
+
+  const items = subjects.filter(s => s.available);
+
+  const handleReset = () => {
+    const ok = window.confirm('Er du sikker på, at du vil nulstille al statistik og alle rekorder? Dette kan ikke fortrydes.');
+    if (!ok) return;
+    try {
+      localStorage.removeItem('quiz-lifetime-stats');
+      subjects.forEach(s => localStorage.removeItem(`quiz-best-${s.id}`));
+    } catch {}
+    setStats({ ...EMPTY_STATS });
+    setBestBySubject(Object.fromEntries(subjects.map(s => [s.id, null])));
+  };
+
+  return (
+    <div className="slide-up">
+      {/* Eyebrow + tilbage */}
+      <div className="font-mono text-[11px] meta text-rose mb-6 flex items-center gap-3 flex-wrap">
+        <button onClick={onBack} className="hover:text-bone transition-colors flex items-center gap-2">
+          <span>←</span>
+          <span>tilbage</span>
+        </button>
+        <span className="inline-block w-6 h-px bg-rose/60" />
+        <span>min statistik</span>
+      </div>
+
+      {/* Hero */}
+      <h1 className="font-serif font-light text-[64px] sm:text-[88px] lg:text-[112px] leading-[0.92] tracking-[-0.02em] mb-12 text-chalk">
+        Mine <span className="italic text-rose glow-rose">point.</span>
+      </h1>
+
+      {/* Samlet score */}
+      <div className="mb-14 border-y border-iron/40 py-10 sm:py-12">
+        <div className="flex items-end justify-between gap-8 flex-wrap">
+          <div>
+            <div className="font-mono text-[10px] meta text-mist mb-3">samlet score</div>
+            <div className="font-serif font-light text-[88px] sm:text-[128px] leading-[0.85] text-rose glow-rose tnum tracking-[-0.02em]">
+              {stats.score.toLocaleString('da-DK')}
+            </div>
+            <div className="font-mono text-[10px] meta text-mist mt-3">
+              point på tværs af alle fag og sessioner
+            </div>
+          </div>
+          <div className="flex gap-10 sm:gap-14 pb-3">
+            <div>
+              <div className="font-mono text-[10px] meta text-mist mb-2">quizzer</div>
+              <div className="font-serif font-light text-4xl sm:text-5xl text-bone tnum">{stats.played}</div>
+            </div>
+            <div>
+              <div className="font-mono text-[10px] meta text-mist mb-2">korrekte</div>
+              <div className="font-serif font-light text-4xl sm:text-5xl text-rose tnum">{stats.correct}</div>
+            </div>
+            <div>
+              <div className="font-mono text-[10px] meta text-mist mb-2">forkerte</div>
+              <div className="font-serif font-light text-4xl sm:text-5xl text-berry tnum">{stats.wrong}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Rekorder pr. fag */}
+      <div className="mt-2">
+        <div className="flex items-end justify-between mb-6">
+          <h2 className="font-mono text-[10px] meta text-mist">Rekorder pr. fag</h2>
+          <span className="font-mono text-[10px] meta text-iron tnum">
+            {items.filter(s => bestBySubject[s.id]).length} / {items.length} spillet
+          </span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {items.map(s => {
+            const b = bestBySubject[s.id];
+            return (
+              <div
+                key={s.id}
+                className={`theme-${s.accent} border border-iron/60 bg-shade/40 ring-soft rounded-xl p-7 sm:p-8`}
+              >
+                <div className="flex items-center justify-between mb-5">
+                  <span className="font-mono text-[10px] meta text-mist">{s.code}</span>
+                  {b && (
+                    <span className="font-mono text-[10px] meta text-rose inline-flex items-center gap-1.5">
+                      <span>★</span>
+                      <span>rekord</span>
+                    </span>
+                  )}
+                </div>
+                <h3 className="font-serif text-3xl sm:text-4xl text-chalk mb-1 leading-none">{s.title}</h3>
+                <p className="font-serif italic text-fog/80 text-sm sm:text-[15px] mb-6">{s.tagline}</p>
+                {b ? (
+                  <div className="flex items-baseline gap-3 flex-wrap">
+                    <span className="font-serif font-light text-5xl text-rose glow-rose tnum tracking-tight leading-none">{b.score}</span>
+                    <span className="text-iron">·</span>
+                    <span className="font-mono text-sm text-rose tnum">{b.pct}%</span>
+                    <span className="text-iron">·</span>
+                    <span className="font-mono text-xs text-mist tnum">{b.correct}/{b.total} rigtige</span>
+                  </div>
+                ) : (
+                  <div className="font-mono text-xs meta text-mist">endnu ikke spillet</div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Nulstil */}
+      <div className="mt-16 pt-8 border-t border-iron/40">
+        <button
+          onClick={handleReset}
+          className="font-mono text-[11px] meta text-mist hover:text-berry transition-colors inline-flex items-center gap-2"
+        >
+          <span>↺</span>
+          <span>nulstil al statistik og rekorder</span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* =========================================================
+   MOUNT
+   ========================================================= */
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+  </script>
+</body>
+</html>
